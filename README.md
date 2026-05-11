@@ -433,3 +433,36 @@ npx playwright show-trace <trace.zip>    # Open trace viewer
 — Pramod & The Testing Academy team
 
 </div>
+
+
+
+
+
+
+What's in Chapter 2 (Available Now)
+Files
+File	Topic	What you'll learn
+05_JS_Basics.js	JS Basics	Variables, assignment, console output
+
+What's in Chapter 3 (Available Now)
+Files
+File	Topic	What you'll learn
+06_Identifier_Rules.js	Identifier Rules	Valid names ($, _, camelCase)
+07_Identifier_Part2.js	Naming Conventions	camelCase, PascalCase, snake_case, SCREAMING_SNAKE_CASE
+08_Comments.js	Comments	Single-line, multi-line & JSDoc style
+js_identifier_rules.js	Reference	Quick identifier rules cheat-sheet
+VS_Code_keyboard_shortcut_mac.md	Shortcuts	VS Code keyboard shortcuts for macOS
+VS_Code_keyboard_shortcut_windows.md	Shortcuts	VS Code keyboard shortcuts for Windows
+
+What's in Chapter 4 (Available Now)
+Files
+File	Topic	What you'll learn
+09_var_let_const.js	var, let, const	Declaration, re-declaration, reassignment
+10_functions.js	Functions	Declaring and calling functions
+11_var_explained.js	var Deep Dive	How var works in loops & functions
+12_let_peope_love.js	let Deep Dive	Block-scoped let behavior
+13_const_explained.js	const Deep Dive	Immutable bindings with const
+14_var_functionscope.js	Function Scope	var scoped to functions
+15_let_scope.js	Block Scope	let scoped to blocks {}
+16_Hoisting.js	Hoisting	Variable hoisting & undefined
+17_hoisting_fn.js	Function Hoisting	How function declarations are hoisted
