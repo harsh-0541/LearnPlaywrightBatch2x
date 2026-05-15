@@ -45,13 +45,13 @@ graph TB
             ch2["Ch 2: JS Concepts ✅"]
             ch3["Ch 3: Identifiers & Literals ✅"]
             ch4["Ch 4: var / let / const & Hoisting ✅"]
-            ch5["Ch 5: Operators"]
-            ch6["Ch 6: If / Else"]
-            ch7["Ch 7: Switch"]
-            ch8["Ch 8: Loops"]
-            ch9["Ch 9: Arrays"]
-            ch10["Ch 10: Functions"]
-            ch11["Ch 11: Strings"]
+            ch5["Ch 5: Literals (null, number, string, template) ✅"]
+            ch6["Ch 6: Operators"]
+            ch7["Ch 7: If / Else"]
+            ch8["Ch 8: Switch"]
+            ch9["Ch 9: Loops"]
+            ch10["Ch 10: Arrays"]
+            ch11["Ch 11: Functions & Strings"]
         end
 
         subgraph adv["⚙️ Advanced JS (Weeks 7–8)"]
@@ -117,7 +117,7 @@ LearnPlaywrightBatch2x/
 │   ├── VS_Code_keyboard_shortcut_mac.md     # macOS VS Code shortcuts
 │   └── VS_Code_keyboard_shortcut_windows.md # Windows VS Code shortcuts
 │
-├── chapter_04_Javascript_Concepts/     🚧 var / let / const & hoisting
+├── chapter_04_Javascript_Concepts/     ✅ var / let / const, hoisting & TDZ
 │   ├── 09_var_let_const.js             # var, let, const basics
 │   ├── 10_functions.js                 # Function declaration & calls
 │   ├── 11_var_explained.js             # var deep dive
@@ -126,7 +126,21 @@ LearnPlaywrightBatch2x/
 │   ├── 14_var_functionscope.js         # var function scope
 │   ├── 15_let_scope.js                 # let block scope
 │   ├── 16_Hoisting.js                  # Variable hoisting explained
-│   └── 17_hoisting_fn.js               # Function hoisting
+│   ├── 17_hoisting_fn.js               # Function hoisting
+│   ├── 18_let_hoisting.js              # let hoisting & Temporal Dead Zone (TDZ)
+│   ├── 19_let_hoisting_block.js        # Block-scoped TDZ shadowing
+│   ├── 20_let_const.js                 # const hoisting (TDZ for const)
+│   └── 21_Jr_QA.js                     # Interview Q&A — TDZ trap with const
+│
+├── chapter_05_Literal/                 ✅ Literals — null, numbers, strings, template
+│   ├── 22_Literal.js                   # Literal kinds + typeof
+│   ├── 23_null_undefined.js            # null vs undefined deep dive
+│   ├── 24_null.js                      # Empty values — null, undefined, "", 0
+│   ├── 25_Literal_All.js               # All literal forms at a glance
+│   ├── 26_Literal_Number_all.js        # Number literals — decimal, binary, octal, hex, BigInt
+│   ├── 27_String.js                    # Single vs double quotes
+│   ├── 28_Template_Literal.js          # Backticks — interpolation in Playwright selectors/logs
+│   └── 29_Backtick_single_double.js    # ' vs " vs ` — the one-page summary
 │
 └── README.md                           👋 You are here
 ```
@@ -361,6 +375,10 @@ mindmap
 | `15_let_scope.js` | Block Scope | `let` scoped to blocks `{}` |
 | `16_Hoisting.js` | Hoisting | Variable hoisting & `undefined` |
 | `17_hoisting_fn.js` | Function Hoisting | How function declarations are hoisted |
+| `18_let_hoisting.js` | let TDZ | Temporal Dead Zone — why `let` errors before declaration |
+| `19_let_hoisting_block.js` | Block TDZ | Inner-block `let` does **not** inherit outer value |
+| `20_let_const.js` | const Hoisting | `const` is hoisted too — same TDZ rules apply |
+| `21_Jr_QA.js` | Interview Q&A | Classic TDZ trap with `const` (junior SDET quiz) |
 
 ### Key Concepts
 
@@ -390,7 +408,304 @@ mindmap
 ```bash
 node chapter_04_Javascript_Concepts/09_var_let_const.js  # → var, let, const behavior
 node chapter_04_Javascript_Concepts/16_Hoisting.js       # → see hoisting in action
+node chapter_04_Javascript_Concepts/18_let_hoisting.js   # → throws TDZ ReferenceError
+node chapter_04_Javascript_Concepts/21_Jr_QA.js          # → interview-style TDZ trap
 ```
+
+### 18 — Temporal Dead Zone (TDZ)
+
+**Concept:** TDZ is the window between when a `let`/`const` is hoisted to the top of its block and when its declaration line is actually reached. Inside that window any read or write throws `ReferenceError: Cannot access 'x' before initialization`.
+
+**Why:** Catches use-before-declare bugs at the source — unlike `var`, which silently returns `undefined` and hides the bug until runtime.
+
+**Q&A — why use this?**
+- **Q: Are `let` and `const` really hoisted?** A: Yes — but to a "not yet usable" state. The binding exists; the value does not. That gap is the TDZ.
+- **Q: How is this different from `var`?** A: `var` is hoisted **and** initialized to `undefined` immediately. `let`/`const` are hoisted but uninitialized — touching them = ReferenceError.
+- **Q: Why does the interview question with `const c` throw?** A: The `console.log(c)` runs **inside** the TDZ of `const c = "pramod"`. Hoisting is not "no declaration"; it's "declaration parked, value not yet set".
+
+```mermaid
+sequenceDiagram
+    participant Engine
+    participant Block as Block scope
+    participant Var as let score
+    Engine->>Block: Enter block
+    Block->>Var: Hoist binding (uninitialized)
+    Note over Var: 🚫 TDZ begins
+    Engine->>Var: console.log(score)
+    Var-->>Engine: ReferenceError ❌
+    Engine->>Var: let score = 100
+    Note over Var: ✅ TDZ ends
+    Engine->>Var: console.log(score)
+    Var-->>Engine: 100 ✅
+```
+
+```js
+// 18_let_hoisting.js — TDZ in action
+console.log(score); // ❌ ReferenceError: Cannot access 'score' before initialization
+let score = 100;
+
+{
+    // ---- TDZ for inner "score" starts ----
+    // console.log(score);  // ❌ ReferenceError
+    // typeof score;        // ❌ ReferenceError (!! typeof normally never throws)
+    let score = 100;        // ✅ TDZ ends here
+    console.log(score);     // 100
+}
+```
+
+| Trap | `var` | `let` / `const` |
+|:-----|:-----:|:---------------:|
+| Read before declaration | `undefined` | **ReferenceError** |
+| Re-declare in same scope | ✅ allowed | ❌ SyntaxError |
+| Scope | Function | Block `{}` |
+| Hoisted? | ✅ + initialized | ✅ but in TDZ |
+
+---
+
+## 📖 What's in Chapter 5 — Literals (Available Now)
+
+### Files
+
+| File | Topic | What you'll learn |
+|------|-------|-------------------|
+| `22_Literal.js` | Literals + `typeof` | String, number, boolean, null, undefined literals |
+| `23_null_undefined.js` | null vs undefined | Who sets them, when to use which, the `typeof null === 'object'` quirk |
+| `24_null.js` | Empty values | `null`, `undefined`, `""`, `0` — same role, different types |
+| `25_Literal_All.js` | All literals | Whirlwind tour of every literal form |
+| `26_Literal_Number_all.js` | Number literals | Decimal, binary `0b`, octal `0o`, hex `0x`, BigInt `n`, `1e6`, `1_000_000`, `NaN`, `Infinity` |
+| `27_String.js` | Quotes | Single `'…'` vs double `"…"` strings (interchangeable) |
+| `28_Template_Literal.js` | Backticks | `` `${var}` `` interpolation — Playwright selectors, log lines, screenshot paths |
+| `29_Backtick_single_double.js` | `'` vs `"` vs `` ` `` | One-page comparison + migration from `+`-concatenation |
+
+### Key Concepts
+
+```mermaid
+mindmap
+  root((Chapter 5 — Literals))
+    Primitive Literals
+      number 42
+      string "hi"
+      boolean true
+      null
+      undefined
+    Number Forms
+      decimal 42
+      binary 0b1010
+      octal 0o52
+      hex 0xFF
+      exp 1.5e3
+      sep 1_000_000
+      BigInt 123n
+    Strings
+      'single'
+      "double"
+      `template`
+    Special
+      NaN
+      Infinity
+      Number.MAX_SAFE_INTEGER
+```
+
+### Run them
+
+```bash
+node chapter_05_Literal/22_Literal.js              # → typeof for each literal
+node chapter_05_Literal/23_null_undefined.js       # → null vs undefined walkthrough
+node chapter_05_Literal/26_Literal_Number_all.js   # → every number literal form
+node chapter_05_Literal/28_Template_Literal.js     # → backtick interpolation
+```
+
+---
+
+### 22 — What is a Literal?
+
+**Concept:** A *literal* is a value written **directly** in source code — `42`, `"hello"`, `true`, `null`. It's the raw value, not a variable referring to one.
+
+**Why:** Every value in a JS program either comes from a literal you typed or was derived from one. Knowing the literal forms = knowing the JS type system.
+
+**Q&A — why use this?**
+- **Q: Why does `typeof null` return `"object"`?** A: 26-year-old JavaScript bug — preserved for backwards compatibility. Test against `null` with `value === null`, never `typeof`.
+- **Q: Is `undefined` a literal?** A: Practically yes, but it's actually a property of the global object. Never assign `undefined` manually — let JS produce it.
+- **Q: Why does `typeof` on a never-declared variable not throw?** A: `typeof` is the **only** operator that's TDZ-safe for *undeclared* identifiers. Returns `"undefined"`. (But TDZ for `let`/`const`? Still throws — see Ch 4.)
+
+```mermaid
+mindmap
+  root((Literal))
+    string
+      'pramod'
+      "pramod"
+    number
+      3.14
+      42
+    boolean
+      true
+      false
+    null
+      typeof = object 🐛
+    undefined
+      typeof = undefined
+```
+
+```js
+// 22_Literal.js
+let age = "pramod";        // string literal
+let isStudent = true;      // boolean literal
+let pi = 3.14;             // number literal
+let nullValue = null;      // null literal
+let undefinedValue;        // implicitly undefined
+
+console.log(typeof age);            // "string"
+console.log(typeof pi);             // "number"
+console.log(typeof isStudent);      // "boolean"
+console.log(typeof nullValue);      // "object"   ← JS bug, kept forever
+console.log(typeof undefinedValue); // "undefined"
+```
+
+---
+
+### 23 — null vs undefined
+
+**Concept:** Both mean "no value", but: `undefined` = JS set it (uninitialized, missing return); `null` = developer set it on purpose ("explicitly empty").
+
+**Why:** Mixing them up causes 90% of "Cannot read properties of undefined" bugs in test code — knowing which to expect tells you whether the bug is in your code or the SUT.
+
+**Q&A — why use this?**
+- **Q: When should *I* assign `null`?** A: When you want to deliberately **clear** a reference (`user = null`) or signal "intentionally empty". Never reach for `undefined` — let JS produce it.
+- **Q: `null == undefined` → ?** A: `true` with `==`, `false` with `===`. Always use `===` to keep them distinct in test assertions.
+- **Q: Playwright API returns null — what does that mean?** A: "Element/value asked for does not exist." Returns `undefined` → "API wasn't called" or "property missing". Different bug categories.
+
+```mermaid
+flowchart LR
+    Var[Variable] --> Q{Who set it?}
+    Q -->|JS automatically| U[undefined<br/>typeof = 'undefined']
+    Q -->|Developer on purpose| N[null<br/>typeof = 'object' 🐛]
+    U -.==.-> N
+    U -.===.-x N
+    style U fill:#fff3e0,stroke:#e65100
+    style N fill:#e1f5fe,stroke:#01579b
+```
+
+```js
+// 23_null_undefined.js
+let userName;                         // JS sets it
+console.log(userName);                // undefined
+console.log(typeof userName);         // "undefined"
+
+let profilePicture = null;            // developer sets it
+console.log(profilePicture);          // null
+console.log(typeof profilePicture);   // "object"  ← classic JS quirk
+
+let a;
+let b = null;
+console.log(a == b);   // true  ← loose equality
+console.log(a === b);  // false ← strict equality (different types)
+```
+
+| | `undefined` | `null` |
+|:-:|:-:|:-:|
+| Set by | JavaScript | Developer |
+| `typeof` | `"undefined"` | `"object"` (bug) |
+| Use case | "Not initialized yet" | "Cleared on purpose" |
+| Assertion in tests | `expect(x).toBeUndefined()` | `expect(x).toBeNull()` |
+
+---
+
+### 26 — Number Literals (every form)
+
+**Concept:** JS has one `number` type (IEEE-754 double) — but many ways to *write* a number: decimal, binary `0b`, octal `0o`, hex `0x`, exponential `1.5e3`, separators `1_000_000`, and `BigInt` (`123n`) for huge integers.
+
+**Why:** Choosing the right literal form makes code self-documenting — `0xFF` says "byte mask", `0b1010_0001` says "bit flags", `1_000_000` says "one million, not ten thousand".
+
+**Q&A — why use this?**
+- **Q: When do I need BigInt?** A: When values exceed `Number.MAX_SAFE_INTEGER` (`2^53 - 1` = `9007199254740991`). Common in timestamps-with-nanoseconds, blockchain IDs, large DB IDs.
+- **Q: `0 / 0` returns?** A: `NaN`. And `typeof NaN === "number"` (yes, really). Test with `Number.isNaN(x)` — **not** `x === NaN` (which is always `false`).
+- **Q: Why is `0.1 + 0.2 !== 0.3`?** A: IEEE-754 float rounding. Compare with `Math.abs(a - b) < Number.EPSILON` for currency, or store cents as integers.
+
+```mermaid
+mindmap
+  root((number))
+    Integer
+      decimal 42
+      binary 0b1010
+      octal 0o52
+      hex 0x2A
+    Float
+      3.14
+      1.5e3
+      1.5e-3
+    Readable
+      1_000_000
+      0xFF_FF
+    BigInt
+      123n
+      BigInt&#40;42&#41;
+    Special
+      Infinity
+      -Infinity
+      NaN
+```
+
+```js
+// 26_Literal_Number_all.js
+let decimal = 42;
+let binary  = 0b1010;          // 10
+let octal   = 0o52;            // 42
+let hex     = 0x2A;            // 42
+let exp     = 1.5e3;           // 1500
+let million = 1_000_000;       // 1000000 (ES2021 separator)
+let big     = 123456789012345678901234567890n; // BigInt
+
+console.log(1 / 0);                          // Infinity
+console.log(0 / 0);                          // NaN
+console.log(typeof NaN);                     // "number"
+console.log(Number.MAX_SAFE_INTEGER);        // 9007199254740991
+```
+
+---
+
+### 28 — Template Literals (Backticks)
+
+**Concept:** A string wrapped in backticks `` ` `` that supports `${expression}` interpolation and real multi-line text — no `+` concatenation, no `\n` escapes.
+
+**Why:** Building Playwright selectors, log lines, dynamic API URLs, and screenshot paths from variables is **everywhere** in test code. Template literals are the cleanest way to do it.
+
+**Q&A — why use this?**
+- **Q: When should I prefer backticks over `'…'` / `"…"`?** A: Any string with a variable inside, any multi-line string, any string with an embedded expression. Plain text? Either is fine — be consistent.
+- **Q: Can I run code inside `${…}`?** A: Yes — any JS expression: `` `${a + b}` ``, `` `${user.toUpperCase()}` ``, `` `${Date.now()}` ``. Statements (if/for) don't fit, but ternaries do.
+- **Q: Do backticks work in JSON?** A: No — JSON only allows `"…"`. Use backticks to **build** the JSON string in JS, then send it.
+
+```mermaid
+flowchart LR
+    A[rowIndex = 3] --> T["`[data-row=&dollar;{rowIndex}]`"]
+    B[columnName = 'email'] --> T
+    T --> P[page.locator&#40;…&#41;]
+    P --> C[Click cell]
+    style T fill:#fff3e0,stroke:#e65100
+```
+
+```js
+// 28_Template_Literal.js — typical Playwright/test-code use
+const rowIndex = 3;
+const columnName = "email";
+await page.locator(`[data-row="${rowIndex}"] [data-col="${columnName}"]`).click();
+
+const testName = "Login Test";
+const status = "FAILED";
+const duration = 2.3;
+console.log(`[${status}] ${testName} completed in ${duration}s`);
+
+const testCase = "checkout_flow";
+const timestamp = Date.now();
+await page.screenshot({ path: `screenshots/${testCase}_${timestamp}.png` });
+```
+
+| Need | `'…'` / `"…"` | `` `…` `` |
+|:-----|:-:|:-:|
+| Plain text | ✅ | ✅ |
+| `${variable}` interpolation | ❌ | ✅ |
+| Multi-line without `\n` | ❌ | ✅ |
+| Expression `${a + b}` | ❌ | ✅ |
+| JSON-compatible | ✅ | ❌ |
 
 ---
 
@@ -402,10 +717,15 @@ graph TD
         N1[Arithmetic / Comparison / Logical Operators] --> N2[If / Else Statements]
         N2 --> N3[Switch Cases]
         N3 --> N4[Loops — for, while, do-while]
+        N4 --> N5[Arrays & Functions]
     end
 
     style next fill:#fff3e0,stroke:#e65100
 ```
+
+**Just shipped:**
+- ✅ Chapter 4 extended with **Temporal Dead Zone (TDZ)** deep-dive (files `18`–`21`)
+- ✅ Chapter 5 — **Literals**: null/undefined, every number form, strings, template literals (files `22`–`29`)
 
 ---
 
@@ -537,36 +857,3 @@ npx playwright show-trace <trace.zip>    # Open trace viewer
 — Pramod & The Testing Academy team
 
 </div>
-
-
-
-
-
-
-What's in Chapter 2 (Available Now)
-Files
-File	Topic	What you'll learn
-05_JS_Basics.js	JS Basics	Variables, assignment, console output
-
-What's in Chapter 3 (Available Now)
-Files
-File	Topic	What you'll learn
-06_Identifier_Rules.js	Identifier Rules	Valid names ($, _, camelCase)
-07_Identifier_Part2.js	Naming Conventions	camelCase, PascalCase, snake_case, SCREAMING_SNAKE_CASE
-08_Comments.js	Comments	Single-line, multi-line & JSDoc style
-js_identifier_rules.js	Reference	Quick identifier rules cheat-sheet
-VS_Code_keyboard_shortcut_mac.md	Shortcuts	VS Code keyboard shortcuts for macOS
-VS_Code_keyboard_shortcut_windows.md	Shortcuts	VS Code keyboard shortcuts for Windows
-
-What's in Chapter 4 (Available Now)
-Files
-File	Topic	What you'll learn
-09_var_let_const.js	var, let, const	Declaration, re-declaration, reassignment
-10_functions.js	Functions	Declaring and calling functions
-11_var_explained.js	var Deep Dive	How var works in loops & functions
-12_let_peope_love.js	let Deep Dive	Block-scoped let behavior
-13_const_explained.js	const Deep Dive	Immutable bindings with const
-14_var_functionscope.js	Function Scope	var scoped to functions
-15_let_scope.js	Block Scope	let scoped to blocks {}
-16_Hoisting.js	Hoisting	Variable hoisting & undefined
-17_hoisting_fn.js	Function Hoisting	How function declarations are hoisted
