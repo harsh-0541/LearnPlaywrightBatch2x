@@ -42,37 +42,38 @@ graph TB
 
         subgraph js["📘 JavaScript (Weeks 1–6)"]
             ch1["Ch 1: Basics ✅"]
-            ch2["Ch 2: JS Concepts"]
-            ch3["Ch 3: Identifiers & Literals"]
-            ch4["Ch 4: Operators"]
-            ch5["Ch 5: If / Else"]
-            ch6["Ch 6: Switch"]
-            ch7["Ch 7: Loops"]
-            ch8["Ch 8: Arrays"]
-            ch9["Ch 9: Functions"]
-            ch10["Ch 10: Strings"]
+            ch2["Ch 2: JS Concepts ✅"]
+            ch3["Ch 3: Identifiers & Literals ✅"]
+            ch4["Ch 4: var / let / const & Hoisting ✅"]
+            ch5["Ch 5: Operators"]
+            ch6["Ch 6: If / Else"]
+            ch7["Ch 7: Switch"]
+            ch8["Ch 8: Loops"]
+            ch9["Ch 9: Arrays"]
+            ch10["Ch 10: Functions"]
+            ch11["Ch 11: Strings"]
         end
 
         subgraph adv["⚙️ Advanced JS (Weeks 7–8)"]
-            ch11["Ch 11: Objects"]
-            ch12["Ch 12: 2D Arrays"]
-            ch13["Ch 13: Callbacks"]
-            ch14["Ch 14: Promises"]
-            ch15["Ch 15: Async / Await"]
-            ch16["Ch 16: OOP - Classes"]
-            ch17["Ch 17: Inheritance"]
+            adv1["Ch 12: Objects"]
+            adv2["Ch 13: 2D Arrays"]
+            adv3["Ch 14: Callbacks"]
+            adv4["Ch 15: Promises"]
+            adv5["Ch 16: Async / Await"]
+            adv6["Ch 17: OOP - Classes"]
+            adv7["Ch 18: Inheritance"]
         end
 
         subgraph ts["🟦 TypeScript (Week 9)"]
-            ch18["Ch 18: TS Fundamentals"]
-            ch19["Ch 19: Interfaces"]
-            ch20["Ch 20: Enums"]
-            ch21["Ch 21: Generics"]
-            ch22["Ch 22: Access Modifiers & Decorators"]
+            ts1["Ch 19: TS Fundamentals"]
+            ts2["Ch 20: Interfaces"]
+            ts3["Ch 21: Enums"]
+            ts4["Ch 22: Generics"]
+            ts5["Ch 23: Access Modifiers & Decorators"]
         end
 
         subgraph pw["🎭 Playwright (Weeks 10–12)"]
-            ch23["Ch 23: PW Fundamentals"]
+            pw1["Ch 24: PW Fundamentals"]
             cli["Lecture: Playwright CLI"]
             ai["Lecture: AI Agents"]
             mcp["Lecture: MCP Protocol"]
@@ -105,8 +106,27 @@ LearnPlaywrightBatch2x/
 │   ├── 03_JS_Verify_Setup.js           # Verify Node.js/OS/arch
 │   └── 04_HotCode.js                   # JIT & "hot" code paths
 │
-├── chapter_02_Javascript_Concepts/     🚧 var / let / const & hoisting
-├── chapter_03_Identifier_Literals/     🚧 Identifiers, literals, equality
+├── chapter_02_Javascript_Concepts/     ✅ JS Basics
+│   └── 05_JS_Basics.js                 # Variables & console output
+│
+├── chapter_03_Identifier_Literals/     ✅ Identifiers, literals & comments
+│   ├── 06_Identifier_Rules.js          # Valid identifier names
+│   ├── 07_Identifier_Part2.js          # Naming conventions (camelCase, PascalCase, snake_case)
+│   ├── 08_Comments.js                  # Single-line & multi-line comments
+│   ├── js_identifier_rules.js          # Identifier rules reference
+│   ├── VS_Code_keyboard_shortcut_mac.md     # macOS VS Code shortcuts
+│   └── VS_Code_keyboard_shortcut_windows.md # Windows VS Code shortcuts
+│
+├── chapter_04_Javascript_Concepts/     🚧 var / let / const & hoisting
+│   ├── 09_var_let_const.js             # var, let, const basics
+│   ├── 10_functions.js                 # Function declaration & calls
+│   ├── 11_var_explained.js             # var deep dive
+│   ├── 12_let_peope_love.js            # let deep dive
+│   ├── 13_const_explained.js           # const deep dive
+│   ├── 14_var_functionscope.js         # var function scope
+│   ├── 15_let_scope.js                 # let block scope
+│   ├── 16_Hoisting.js                  # Variable hoisting explained
+│   └── 17_hoisting_fn.js               # Function hoisting
 │
 └── README.md                           👋 You are here
 ```
@@ -281,26 +301,110 @@ node chapter_01_Basics/04_HotCode.js         # → triggers V8 hot-path optimiza
 
 ---
 
+## 📖 What's in Chapter 2 (Available Now)
+
+### Files
+
+| File | Topic | What you'll learn |
+|------|-------|-------------------|
+| `05_JS_Basics.js` | JS Basics | Variables, assignment, console output |
+
+---
+
+## 📖 What's in Chapter 3 (Available Now)
+
+### Files
+
+| File | Topic | What you'll learn |
+|------|-------|-------------------|
+| `06_Identifier_Rules.js` | Identifier Rules | Valid names (`$`, `_`, camelCase) |
+| `07_Identifier_Part2.js` | Naming Conventions | camelCase, PascalCase, snake_case, SCREAMING_SNAKE_CASE |
+| `08_Comments.js` | Comments | Single-line, multi-line & JSDoc style |
+| `js_identifier_rules.js` | Reference | Quick identifier rules cheat-sheet |
+| `VS_Code_keyboard_shortcut_mac.md` | Shortcuts | VS Code keyboard shortcuts for macOS |
+| `VS_Code_keyboard_shortcut_windows.md` | Shortcuts | VS Code keyboard shortcuts for Windows |
+
+### Key Concepts
+
+```mermaid
+mindmap
+  root((Chapter 3))
+    Identifiers
+      $ and _ allowed
+      Cannot start with number
+      Case-sensitive
+    Naming Conventions
+      camelCase
+      PascalCase
+      snake_case
+      SCREAMING_SNAKE_CASE
+    Comments
+      Single-line //
+      Multi-line /* */
+      JSDoc /** */
+```
+
+---
+
+## 📖 What's in Chapter 4 (Available Now)
+
+### Files
+
+| File | Topic | What you'll learn |
+|------|-------|-------------------|
+| `09_var_let_const.js` | var, let, const | Declaration, re-declaration, reassignment |
+| `10_functions.js` | Functions | Declaring and calling functions |
+| `11_var_explained.js` | var Deep Dive | How `var` works in loops & functions |
+| `12_let_peope_love.js` | let Deep Dive | Block-scoped `let` behavior |
+| `13_const_explained.js` | const Deep Dive | Immutable bindings with `const` |
+| `14_var_functionscope.js` | Function Scope | `var` scoped to functions |
+| `15_let_scope.js` | Block Scope | `let` scoped to blocks `{}` |
+| `16_Hoisting.js` | Hoisting | Variable hoisting & `undefined` |
+| `17_hoisting_fn.js` | Function Hoisting | How function declarations are hoisted |
+
+### Key Concepts
+
+```mermaid
+mindmap
+  root((Chapter 4))
+    var
+      Function scoped
+      Hoisted with undefined
+      Can re-declare
+    let
+      Block scoped
+      Hoisted but TDZ
+      Cannot re-declare
+    const
+      Block scoped
+      Must initialize
+      Cannot re-assign
+    Hoisting
+      var → undefined
+      let → TDZ error
+      Functions → fully hoisted
+```
+
+### Run them
+
+```bash
+node chapter_04_Javascript_Concepts/09_var_let_const.js  # → var, let, const behavior
+node chapter_04_Javascript_Concepts/16_Hoisting.js       # → see hoisting in action
+```
+
+---
+
 ## 🔭 What's Coming Next
 
 ```mermaid
 graph TD
-    subgraph next["Next Up — Chapter 2: JavaScript Concepts"]
-        N1[var vs let vs const] --> N2[Hoisting]
-        N2 --> N3[Temporal Dead Zone]
-        N3 --> N4[Block vs Function Scope]
+    subgraph next["Next Up — Operators & Control Flow"]
+        N1[Arithmetic / Comparison / Logical Operators] --> N2[If / Else Statements]
+        N2 --> N3[Switch Cases]
+        N3 --> N4[Loops — for, while, do-while]
     end
-
-    subgraph then["Then — Chapter 3: Identifiers & Literals"]
-        T1[Valid identifier rules] --> T2[String / Number / Boolean literals]
-        T2 --> T3[null vs undefined]
-        T3 --> T4["== vs ==="]
-    end
-
-    next --> then
 
     style next fill:#fff3e0,stroke:#e65100
-    style then fill:#e8eaf6,stroke:#3f51b5
 ```
 
 ---

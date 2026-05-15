@@ -23,7 +23,7 @@ say();
 const person = { name: "Harsh", age: 25 };
 
 
-//  Cannot reassign the entire object
+//  Cannot reassign the entire object
 person = { name: "Rahul", age: 30 };
 
 // ERROR: Assignment to constant variable 

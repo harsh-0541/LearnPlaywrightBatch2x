@@ -2,6 +2,7 @@
 
 > Default keybindings for Visual Studio Code on macOS.
 
+
 ---
 
 ## General
