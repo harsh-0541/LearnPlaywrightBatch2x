@@ -20,3 +20,21 @@ console.log(doubleIt(10));
 
 const printIt = name => console.log(name);
 printIt("Dutta");
+
+function add(a, b) {
+    return a + b;
+}
+
+const add2 = (a, b) => a + b;
+
+// no argument
+function say() {
+    console.log("Hello")
+}
+
+const say1 = () => console.log("Hello");
+
+const greet5 = (name) => {
+    const message = "hi" + name;
+    return message;
+}

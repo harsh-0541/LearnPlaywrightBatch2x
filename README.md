@@ -204,7 +204,7 @@ LearnPlaywrightBatch2x/
 │   ├── 95_Array_checking.js            # Array.isArray, every, some
 │   └── 96_Transform_array.js           # sort with compare function (ascending / descending)
 │
-├── Chapter_12_Functions/               ✅ Functions — declaration, expression, arrow
+├── Chapter_12_Functions/               ✅ Functions — declaration, expression, arrow, IIFE, closures, HOF
 │   ├── 96_Functions.js                 # Function definition & call
 │   ├── 97_Type1_Fn_Basic_Functions.js  # Type 1: no param, no return
 │   ├── 98_Type2_Fn_With_Param_No_Return.js # Type 2: with param, no return
@@ -212,7 +212,21 @@ LearnPlaywrightBatch2x/
 │   ├── 100_Type4_Fn_With_Param_With_Return.js   # Type 4: with param, with return
 │   ├── 101_Template_literal.js         # Template literals inside functions
 │   ├── 102_Fn_Expression.js            # Function expressions
-│   └── 103_Arrow_Fn.js                 # Arrow functions (ES6)
+│   ├── 103_Arrow_Fn.js                 # Arrow functions (ES6)
+│   ├── 104_Arrow_func_realone.js      # Arrow function — real-world status-code check
+│   ├── 105_IIFE.js                     # IIFE (Immediately Invoked Function Expression)
+│   ├── 106_Default_param.js            # Default parameters
+│   ├── 107_IQ.js                       # Interview Q — return values & template literals
+│   ├── 108_Rest_Param.js             # Rest parameters (...args)
+│   ├── 109_IQ.js                       # Interview Q — HTTP status categories & implicit return
+│   ├── 110_Spread_IQ.js              # Spread operator ... vs rest parameter
+│   ├── 111_Scope_IQ.js               # Scope — global vs local access
+│   ├── 112_IQ.js                       # Interview Q — nested scope & blocked scope
+│   ├── 113_Clouser.js                # Closures — inner function retains outer scope
+│   ├── 114_clouser.js                # Closure counter example
+│   ├── 115_API_Real_Clouser.js       # Real-world closure — retry tracker
+│   ├── 116_Higher_order.js           # Higher-Order Functions
+│   └── 117_Pure_fn.js                # Pure vs impure functions
 │
 └── README.md                           👋 You are here
 ```
@@ -2042,6 +2056,20 @@ console.log(passed);  // ["Login", "Search"]
 | `101_Template_literal.js` | Template literals in functions | Return interpolated strings from a function |
 | `102_Fn_Expression.js` | Function expressions | Assign a function to a variable — `const fn = function() {}` |
 | `103_Arrow_Fn.js` | Arrow functions | Compact syntax: `const fn = (x) => x * 2` |
+| `104_Arrow_func_realone.js` | Arrow real-world | Status-code validator in one line |
+| `105_IIFE.js` | IIFE | Immediately invoked — no separate call needed |
+| `106_Default_param.js` | Default parameters | Fallback values in the function signature |
+| `107_IQ.js` | Interview Q | Return values with template literals |
+| `108_Rest_Param.js` | Rest parameters | Gather remaining args with `...args` |
+| `109_IQ.js` | Interview Q | HTTP status categories & implicit return |
+| `110_Spread_IQ.js` | Spread vs Rest | `...` in call (spread) vs in definition (rest) |
+| `111_Scope_IQ.js` | Scope basics | Global vs local variable access |
+| `112_IQ.js` | Interview Q | Nested scope & blocked scope |
+| `113_Clouser.js` | Closures | Inner function retains outer scope |
+| `114_clouser.js` | Closure counter | Private state via closure |
+| `115_API_Real_Clouser.js` | Real-world closure | Retry tracker with private `attempts` |
+| `116_Higher_order.js` | Higher-Order Functions | Functions that take or return functions |
+| `117_Pure_fn.js` | Pure functions | Predictable, no side effects |
 
 ### Key Concepts
 
@@ -2062,6 +2090,20 @@ mindmap
       implicit return
     Template literals
       return `Hello ${name}`
+    IIFE
+      (function(){})()
+    Default params
+      fn(a = 1)
+    Rest / Spread
+      ...args
+    Scope
+      global / local / block
+    Closures
+      inner remembers outer
+    Higher-Order
+      takes or returns fn
+    Pure functions
+      same input → same output
 ```
 
 ### Run them
@@ -2075,6 +2117,20 @@ node Chapter_12_Functions/100_Type4_Fn_With_Param_With_Return.js   # → 9
 node Chapter_12_Functions/101_Template_literal.js        # → "Hello, Alice"
 node Chapter_12_Functions/102_Fn_Expression.js           # → function expression vs declaration
 node Chapter_12_Functions/103_Arrow_Fn.js                # → arrow function shorthand
+node Chapter_12_Functions/104_Arrow_func_realone.js      # → arrow status-code validator
+node Chapter_12_Functions/105_IIFE.js                    # → IIFE — auto-invoke
+node Chapter_12_Functions/106_Default_param.js          # → default param values
+node Chapter_12_Functions/107_IQ.js                     # → interview: return template literal
+node Chapter_12_Functions/108_Rest_Param.js           # → rest params
+node Chapter_12_Functions/109_IQ.js                     # → interview: status categories
+node Chapter_12_Functions/110_Spread_IQ.js            # → spread vs rest
+node Chapter_12_Functions/111_Scope_IQ.js              # → scope demo
+node Chapter_12_Functions/112_IQ.js                     # → interview: nested scope
+node Chapter_12_Functions/113_Clouser.js              # → closure basics
+node Chapter_12_Functions/114_clouser.js              # → closure counter
+node Chapter_12_Functions/115_API_Real_Clouser.js    # → closure retry tracker
+node Chapter_12_Functions/116_Higher_order.js        # → higher-order function
+node Chapter_12_Functions/117_Pure_fn.js             # → pure vs impure
 ```
 
 ### 96 — Function Basics
@@ -2173,6 +2229,190 @@ printIt("Dutta");  // "Dutta"
 | `this` binding | Own `this` | Own `this` | Inherited `this` |
 | Best for | Standalone helpers | Callbacks, object props | Short callbacks, transforms |
 
+---
+
+### 104 — Arrow Function Real-World Example
+
+**Concept:** Refactor a normal validation function to a concise arrow function for checking HTTP status codes.
+
+```js
+// 104_Arrow_func_realone.js
+const validateStatusCode = status =>
+    status >= 200 && status < 300
+        ? console.log("Successfully received response")
+        : console.log("Error response");
+```
+
+---
+
+### 105 — IIFE (Immediately Invoked Function Expression)
+
+**Concept:** A function that runs as soon as it is defined — no separate call needed. Wrap the function in parentheses and add `()` at the end.
+
+**Why:** Creates a private scope, avoids polluting the global namespace, useful for one-time setup (config, polyfills, test stubs).
+
+```js
+// 105_IIFE.js
+(function () {
+    console.log("I am IIFE");
+})();
+
+(() => {
+    console.log("Arrow with IIFE");
+})();
+```
+
+---
+
+### 106 — Default Parameters
+
+**Concept:** Assign fallback values directly in the function signature. If the caller omits an argument, the default is used.
+
+**Why:** Eliminates manual `if (x === undefined)` checks; makes APIs self-documenting.
+
+```js
+// 106_Default_param.js
+function retry(testName, maxRetries = 3, delay = 1000) {
+    console.log(`Retrying ${testName} up to ${maxRetries} times, delay ${delay}ms`);
+}
+retry("Login Test");               // uses defaults
+retry("Reg Flow", 5, 2000);        // overrides defaults
+```
+
+---
+
+### 108 — Rest Parameters
+
+**Concept:** `...results` gathers all remaining arguments into a real array. Must be the **last** parameter.
+
+**Why:** Handles variable-length argument lists cleanly (e.g., logging multiple test results).
+
+```js
+// 108_Rest_Param.js
+function logResult(suiteName, ...results) {
+    console.log(suiteName);
+    console.log(results);  // [1, 2, 3]
+}
+logResult("LoginTest", 1, 2, 3);
+```
+
+---
+
+### 110 — Spread vs Rest
+
+**Concept:** `...` inside a **function definition** = rest (gather). `...` in a **function call** = spread (expand).
+
+```js
+// 110_Spread_IQ.js
+function add(a, b, c) { return a + b + c; }
+let nums = [1, 2, 3];
+add(...nums);  // spread array into arguments
+
+function hasError(...codes) {
+    return codes.some(c => c >= 400);
+}
+hasError(...[200, 201, 404]);  // rest gathers, spread expands
+```
+
+---
+
+### 111–112 — Scope in Functions
+
+**Concept:** Variables are accessible based on where they are declared — **global** (everywhere), **local/function** (inside the function), **block** (inside `{}`). Inner scopes can read outer scopes, but not vice versa.
+
+```js
+// 111_Scope_IQ.js
+let env = "staging";        // global
+function setupConfig() {
+    let timeout = 3000;     // local
+    console.log(env);       // ✅ reads global
+}
+console.log(timeout);       // ❌ ReferenceError — outer can't see inner
+
+// 112_IQ.js — nested scope
+function outer() {
+    let x = 10;
+    function inner() {
+        let y = 20;
+        console.log(x);     // ✅ inner sees outer
+    }
+    console.log(y);         // ❌ outer can't see inner
+}
+```
+
+---
+
+### 113–115 — Closures
+
+**Concept:** A closure is a function that **remembers** the variables from its outer scope even after the outer function has finished executing.
+
+**Why:** Powers private state, factory functions, and real-world patterns like retry counters and rate limiters.
+
+```js
+// 113_Clouser.js
+function outer() {
+    let message = "hello";
+    function inner() { console.log(message); }
+    return inner;
+}
+let fn = outer();
+fn();  // "hello" — still remembers message
+
+// 115_API_Real_Clouser.js — retry tracker
+function makeRetryTracker(max) {
+    let attempts = 0;
+    function tryAgain(testName) {
+        attempts++;
+        if (attempts > max) return `${testName} exceeded max retries`;
+        return `Attempt ${attempts}/${max} for ${testName}`;
+    }
+    return tryAgain;
+}
+let retry = makeRetryTracker(3);
+retry("Login");  // Attempt 1/3
+retry("Login");  // Attempt 2/3
+retry("Login");  // Attempt 3/3
+retry("Login");  // exceeded
+```
+
+---
+
+### 116 — Higher-Order Functions
+
+**Concept:** A function that either **takes a function as an argument** or **returns a function**.
+
+**Why:** The foundation of functional programming — map, filter, reduce are all HOFs. In tests, you can wrap any test function with logging, retry, or timing logic.
+
+```js
+// 116_Higher_order.js
+function runWithLogging(testFn, testName) {
+    console.log(`Running: ${testName}`);
+    return testFn();
+}
+runWithLogging(() => "pass", "Login Test");
+```
+
+---
+
+### 117 — Pure vs Impure Functions
+
+**Concept:** A **pure function** always returns the same output for the same input and has **no side effects**. An **impure function** depends on or modifies external state.
+
+**Why:** Pure functions are predictable, easy to test, and thread-safe. Impure functions are where bugs hide.
+
+```js
+// 117_Pure_fn.js
+// ✅ Pure
+function calculatePassRate(total, passed) {
+    return ((passed / total) * 100).toFixed(2);
+}
+
+// ❌ Impure — depends on external variable
+let threshold = 60;
+function isPassing(score) {
+    return score >= threshold;
+}
+```
 
 ---
 
@@ -2198,7 +2438,7 @@ graph TD
 - ✅ Chapter 9 — **User Input**: browser `prompt()`, Node `readline`, `prompt-sync` (files `68`–`70`)
 - ✅ Chapter 10 — **Loops**: for, while, do-while, continue, IQ traps (files `71`–`82`)
 - ✅ Chapter 11 — **Arrays**: creation, access, add/remove, splice, search, iterate, transform, sort, slice, concat, checking (files `83`–`96`)
-- ✅ Chapter 12 — **Functions**: four types, template literals, function expressions, arrow functions (files `96`–`103`)
+- ✅ Chapter 12 — **Functions**: four types, template literals, expressions, arrow functions, IIFE, default params, rest/spread, scope, closures, HOF, pure functions (files `96`–`117`)
 
 ---
 
