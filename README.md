@@ -228,6 +228,17 @@ LearnPlaywrightBatch2x/
 │   ├── 116_Higher_order.js           # Higher-Order Functions
 │   └── 117_Pure_fn.js                # Pure vs impure functions
 │
+├── chapter_13_Strings/                  ✅ Strings — creation, properties, search, substring, transform
+│   ├── 118_Strings.js                  # String literals, backticks, multiline, String constructor
+│   ├── 119_String_Properties.js        # length, index access, charAt, charCodeAt, .at()
+│   ├── 120_Search_Check_Str.js         # includes, startsWith, endsWith, indexOf, lastIndexOf, search(regex)
+│   ├── 121_Substring.js                # slice, substring, negative indexes
+│   ├── 122_Transform_Str.js            # toUpperCase, toLowerCase, trim, replace, replaceAll, split, join
+│   ├── 123_SC.js                       # String conversion — toString, Number, parseInt, parseFloat
+│   ├── Tasks_Anagrams.js             # Coding task — check if two words are anagrams
+│   ├── Tasks_palindrome.js           # Coding task — check if a string is a palindrome
+│   └── javascript_stringcheatsheet.md  # Quick reference cheat-sheet for JS strings
+│
 └── README.md                           👋 You are here
 ```
 
@@ -2416,13 +2427,246 @@ function isPassing(score) {
 
 ---
 
+## 📖 What's in Chapter 13 — Strings (Available Now)
+
+### Files
+
+| File | Topic | What you'll learn |
+|------|-------|-------------------|
+| `118_Strings.js` | String literals | Single quotes, double quotes, backticks, multiline strings, `String()` constructor |
+| `119_String_Properties.js` | Properties & access | `length`, bracket index `[i]`, `.at(-1)` for negative index, `charAt`, `charCodeAt` |
+| `120_Search_Check_Str.js` | Search & check | `includes`, `startsWith`, `endsWith`, `indexOf`, `lastIndexOf`, `search` with regex |
+| `121_Substring.js` | Substring extraction | `slice(start, end)` (supports negatives), `substring(start, end)` |
+| `122_Transform_Str.js` | Transform strings | `toUpperCase`, `toLowerCase`, `trim`, `replace`, `replaceAll`, `split`, `join` |
+| `123_SC.js` | Type conversion | `toString`, `Number()`, `parseInt`, `parseFloat` |
+| `Tasks_Anagrams.js` | Coding task | Check if two words are anagrams (sort + compare) |
+| `Tasks_palindrome.js` | Coding task | Check if a string is a palindrome (reverse + compare) |
+| `javascript_stringcheatsheet.md` | Cheat-sheet | Quick reference for all common string methods |
+
+### Key Concepts
+
+```mermaid
+mindmap
+  root((Chapter 13 — Strings))
+    Literals
+      'single'
+      "double"
+      `template`
+      multiline
+    Properties
+      length
+      [index]
+      .at(-1)
+      charAt
+      charCodeAt
+    Search
+      includes
+      startsWith
+      endsWith
+      indexOf
+      lastIndexOf
+      search(regex)
+    Extract
+      slice
+      substring
+    Transform
+      toUpperCase
+      toLowerCase
+      trim / trimStart / trimEnd
+      replace / replaceAll
+      split
+      join
+    Conversion
+      toString
+      Number
+      parseInt
+      parseFloat
+```
+
+### Run them
+
+```bash
+node chapter_13_Strings/118_Strings.js              # → string literals, backticks, multiline
+node chapter_13_Strings/119_String_Properties.js  # → length, index access, charAt, .at()
+node chapter_13_Strings/120_Search_Check_Str.js     # → includes, startsWith, indexOf, search(regex)
+node chapter_13_Strings/121_Substring.js            # → slice, substring
+node chapter_13_Strings/122_Transform_Str.js        # → toUpperCase, trim, replace, split, join
+node chapter_13_Strings/123_SC.js                 # → toString, parseInt, parseFloat
+node chapter_13_Strings/Tasks_Anagrams.js         # → anagram check
+node chapter_13_Strings/Tasks_palindrome.js       # → palindrome check
+```
+
+### 118 — String Literals
+
+**Concept:** JavaScript strings can be created with single quotes `'…'`, double quotes `"…"`, or backticks `` `…` ``. Backticks enable `${expression}` interpolation and real multi-line text. The `String()` constructor converts any value to a string.
+
+**Why:** Playwright test code is full of dynamic strings — selectors, URLs, screenshot paths, log messages. Knowing all three quote styles and when to use each prevents escaping headaches.
+
+```js
+// 118_Strings.js
+let a = 'hello';
+let b = "world";
+let name1 = "Alice";
+let msg = `Hello, ${name1}! 2 + 2 = ${2 + 2}`;
+
+// Multiline — backticks preserve line breaks
+let report = `
+  Test: Login
+  Status: Pass
+  Duration: 320ms
+`;
+
+console.log(String(200));      // "200"
+console.log(String(true));     // "true"
+console.log(String([1, 2]));   // "[1,2]"
+```
+
+| Quote | Interpolation | Multi-line | Escape needed |
+|:-----:|:-------------:|:----------:|:-------------|
+| `'…'` | ❌ | ❌ | `'` → `\'` |
+| `"…"` | ❌ | ❌ | `"` → `\"` |
+| `` `…` `` | ✅ `${}` | ✅ | `` ` `` → `\`` |
+
+---
+
+### 119 — String Properties & Access
+
+**Concept:** Strings are zero-indexed sequences of characters. `length` returns the total count. Bracket notation `str[i]` reads a character; `.at(index)` is the modern alternative that supports **negative indices** (`.at(-1)` = last character).
+
+**Why:** In test automation you constantly parse status messages, extract IDs from URLs, or verify the last character of a generated code. Negative indexing with `.at(-1)` is cleaner than `str[str.length - 1]`.
+
+```js
+// 119_String_Properties.js
+let str = "Hello, World!";
+console.log(str.length);      // 13
+console.log(str[0]);          // "H"
+console.log(str[7]);          // "W"
+console.log(str.at(-1));      // "!"  ← last character
+console.log(str.at(-6));      // "W"  ← 6th from end
+console.log(str.charAt(0));   // "H"
+console.log(str.charCodeAt(0)); // 72 (ASCII code of 'H')
+```
+
+---
+
+### 120 — Search & Check
+
+**Concept:** Six methods to search inside a string: `includes` (boolean), `startsWith` / `endsWith` (boolean), `indexOf` / `lastIndexOf` (position or `-1`), and `search` (regex match position or `-1`).
+
+**Why:** Validating URLs, checking if a response contains an error keyword, or verifying that a file path ends with `.png` — these checks happen in almost every test.
+
+```js
+// 120_Search_Check_Str.js
+let url = "https://staging.vwo.com/api/login?retry=true";
+
+console.log(url.includes("staging"));      // true
+console.log(url.includes("production"));   // false
+
+console.log(url.startsWith("https"));      // true
+console.log(url.endsWith("true"));         // true
+
+console.log(url.indexOf("a"));             // first 'a' position
+console.log(url.lastIndexOf("a"));         // last 'a' position
+console.log(url.search(/login/));          // regex search → position
+```
+
+---
+
+### 121 — Substring Extraction
+
+**Concept:** `slice(start, end)` extracts a portion of a string and supports **negative indexes** (count from end). `substring(start, end)` is similar but treats negatives as `0`. Both return a new string — the original is unchanged.
+
+**Why:** Extracting test IDs, version numbers, or timestamps from filenames and logs is a daily task. `slice` is the more powerful and predictable choice.
+
+```js
+// 121_Substring.js
+let str = "Login_Test_Pass_001";
+console.log(str.slice(0, 5));     // "Login" (indices 0–4)
+console.log(str.slice(11));       // "Pass_001" (from index 11 to end)
+console.log(str.slice(-3));       // "001" (last 3 characters)
+console.log(str.substring(6, 10)); // "Test" (same, no negatives)
+```
+
+---
+
+### 122 — Transform Strings
+
+**Concept:** Change case (`toUpperCase`, `toLowerCase`), remove whitespace (`trim`, `trimStart`, `trimEnd`), replace text (`replace`, `replaceAll`), split into arrays (`split`), and join arrays back (`join`).
+
+**Why:** Normalizing user input, formatting test names, cleaning API responses, and generating readable reports all depend on these methods.
+
+```js
+// 122_Transform_Str.js
+let str = "  Hello, World!  ";
+console.log(str.toUpperCase());          // "  HELLO, WORLD!  "
+console.log(str.toLowerCase());          // "  hello, world!  "
+console.log(str.trim());                 // "Hello, World!"
+
+let msg = "Test: FAIL. Retry: FAIL.";
+console.log(msg.replace("FAIL", "PASS"));  // replaces first only
+console.log(msg.replaceAll("FAIL", "PASS")); // replaces all
+
+// Split & join pipeline
+let rr = "test_login_pass".split("_").join(" ");
+console.log(rr);                         // "test login pass"
+
+let parts = ["2024", "03", "07"];
+console.log(parts.join("-"));            // "2024-03-07"
+```
+
+---
+
+### 123 — String Conversion
+
+**Concept:** Convert values to strings with `.toString()` or `String()`. Parse strings to numbers with `Number()`, `parseInt()`, and `parseFloat()`. `parseInt` and `parseFloat` stop at the first non-numeric character and ignore the rest.
+
+**Why:** API responses arrive as strings; calculations need numbers. Knowing the difference between strict `Number()` and forgiving `parseInt()` prevents `NaN` surprises.
+
+```js
+// 123_SC.js
+console.log((200).toString());         // "200"
+console.log(true.toString());          // "true"
+
+console.log(Number("42"));             // 42
+console.log(parseInt("42px"));         // 42 (stops at 'p')
+console.log(parseFloat("3.14rem"));    // 3.14
+```
+
+---
+
+### Coding Tasks
+
+**Anagram check** — sort both words and compare:
+```js
+// Tasks_Anagrams.js
+let word1 = "was";
+let word2 = "saw";
+let sorted1 = word1.toLowerCase().split("").sort().join("");
+let sorted2 = word2.toLowerCase().split("").sort().join("");
+console.log(sorted1 === sorted2);  // true
+```
+
+**Palindrome check** — reverse and compare case-insensitively:
+```js
+// Tasks_palindrome.js
+let str = "Madam";
+let reversed = "";
+for (let i = str.length - 1; i >= 0; i--) {
+    reversed += str[i];
+}
+console.log(str.toLowerCase() === reversed.toLowerCase());  // true
+```
+
+---
+
 ## 🔭 What's Coming Next
 
 ```mermaid
 graph TD
     subgraph next["Next Up — Objects & Advanced JS"]
-        N1[Ch 12: Functions ✅] --> N2[Ch 13: Objects]
-        N2 --> N3[Ch 14: Callbacks]
+        N1[Ch 12: Functions ✅] --> N2[Ch 13: Strings ✅]
+        N2 --> N3[Ch 14: Objects]
+        N3 --> N4[Ch 15: 2D Arrays]
     end
 
     style next fill:#fff3e0,stroke:#e65100
@@ -2439,6 +2683,7 @@ graph TD
 - ✅ Chapter 10 — **Loops**: for, while, do-while, continue, IQ traps (files `71`–`82`)
 - ✅ Chapter 11 — **Arrays**: creation, access, add/remove, splice, search, iterate, transform, sort, slice, concat, checking (files `83`–`96`)
 - ✅ Chapter 12 — **Functions**: four types, template literals, expressions, arrow functions, IIFE, default params, rest/spread, scope, closures, HOF, pure functions (files `96`–`117`)
+- ✅ Chapter 13 — **Strings**: literals, properties, search & check, substring, transform, conversion, anagram & palindrome tasks (files `118`–`123`)
 
 ---
 
