@@ -56,13 +56,13 @@ graph TB
         end
 
         subgraph adv["⚙️ Advanced JS (Weeks 7–8)"]
-            adv1["Ch 12: Objects"]
-            adv2["Ch 13: 2D Arrays"]
-            adv3["Ch 14: Callbacks"]
-            adv4["Ch 15: Promises"]
-            adv5["Ch 16: Async / Await"]
-            adv6["Ch 17: OOP - Classes"]
-            adv7["Ch 18: Inheritance"]
+            adv1["Ch 14: Objects ✅"]
+            adv2["Ch 15: 2D Arrays ✅"]
+            adv3["Ch 16: Callbacks ✅"]
+            adv4["Ch 17: Promises"]
+            adv5["Ch 18: Async / Await"]
+            adv6["Ch 19: OOP - Classes"]
+            adv7["Ch 20: Inheritance"]
         end
 
         subgraph ts["🟦 TypeScript (Week 9)"]
@@ -238,6 +238,42 @@ LearnPlaywrightBatch2x/
 │   ├── Tasks_Anagrams.js             # Coding task — check if two words are anagrams
 │   ├── Tasks_palindrome.js           # Coding task — check if a string is a palindrome
 │   └── javascript_stringcheatsheet.md  # Quick reference cheat-sheet for JS strings
+│
+├── Chapter_14_objects.js/              ✅ Objects — creation, properties, methods, destructuring, spread, getters/setters
+│   ├── 124_Objects.js                  # Object literal syntax — key/value pairs, property access
+│   ├── 125_Objects2.js                 # Object as data container — multi-property objects
+│   ├── 126_Objects_Creation.js         # Ways to create objects — literal, constructor, Object.create()
+│   ├── 127_Objects_REAL.js             # Real-world: build a test config object dynamically
+│   ├── 128_Primitive_Ref.js            # Primitive vs reference types — copy vs alias
+│   ├── 129_Ob_Examples.js              # JSON-shaped objects — parse/stringify patterns
+│   ├── 130_IQ.js                       # Interview Q — object property access traps
+│   ├── 131_Object_Fn.js                # Methods on objects — functions as values
+│   ├── 132_Obj_Decon.js                # Destructuring — extract named properties cleanly
+│   ├── 133_Spead.js                    # Spread operator {...obj} — copy & merge objects
+│   ├── 134_Objects_GET_SET_Methods.js  # Getters & setters — computed properties with get/set
+│   ├── 136_Obj_REAL.js                 # Real-world: ENV config object — base URL, timeout, retries
+│   └── 137_Let_const_obj.js            # let vs const with objects — mutation vs reassignment
+│
+├── Chapter_15_2D_array/                ✅ 2D Arrays — matrix traversal, real-world test data grids
+│   ├── 138_2D_Array.js                 # 2D array basics — nested loops, row/column access
+│   ├── 139_2d.js                       # Matrix dimensions — rows × columns, boundary checks
+│   ├── 140_REAL.js                     # Real-world: test result matrix [testName, status, statusCode]
+│   ├── 141_2d_Array_Fn.js              # Row totals & averages — student score grid
+│   ├── 142_IQ_Right_Pattern_Py.js      # IQ: print right-angle star pattern with nested loops
+│   └── testdata.csv                    # Sample CSV test data used in matrix examples
+│
+├── Chapter_16_Callback/                ✅ Callbacks — sync/async callbacks, callback hell, Playwright-style usage
+│   ├── 143_Callback.js                 # Callback basics — passing a function as an argument
+│   ├── 144_CB.js                       # Playwright-flavoured test() with callback
+│   ├── 145_CB_Fn.js                    # Callback inside a cafe-ordering simulation
+│   ├── 146_PW_CB.js                    # Hand-rolled test() runner — how Playwright test() works
+│   ├── 147_JS_CB.js                    # Async callback — setTimeout simulating API delay
+│   ├── 148_Sync_CB.js                  # Sync callback — forEach over test results array
+│   ├── 149_Async_CB.js                 # Async callback — event-loop order with setTimeout
+│   ├── 150_CB_Hell.js                  # Callback hell intro — nested login/navigate/assert steps
+│   ├── 151_CB_Hell_20_Steps.js         # Pyramid of doom — 24-step E2E checkout as nested callbacks
+│   ├── 152_CB_Parameter.js             # Callbacks with parameters — greeting + callback invocation
+│   └── 153_CB_Return.js                # Returning values from callbacks — calculate() higher-order fn
 │
 └── README.md                           👋 You are here
 ```
@@ -2659,16 +2695,275 @@ console.log(str.toLowerCase() === reversed.toLowerCase());  // true
 
 ---
 
+## 📖 What's in Chapter 14 — Objects (Available Now)
+
+### Files
+
+| File | Topic | What you'll learn |
+|------|-------|-------------------|
+| `124_Objects.js` | Object Basics | Object literal syntax — key/value pairs, dot & bracket access |
+| `125_Objects2.js` | Multi-property Objects | Objects as data containers |
+| `126_Objects_Creation.js` | Object Creation | Literal, constructor, and `Object.create()` patterns |
+| `127_Objects_REAL.js` | Real-World Objects | Building a dynamic test config object |
+| `128_Primitive_Ref.js` | Primitive vs Reference | Copy semantics vs alias — why `b = a` doesn't clone objects |
+| `129_Ob_Examples.js` | JSON-shaped Objects | Objects that mirror API JSON payloads |
+| `130_IQ.js` | IQ — Property Access | Interview traps with dot vs bracket notation |
+| `131_Object_Fn.js` | Object Methods | Functions as object property values |
+| `132_Obj_Decon.js` | Destructuring | Extract named properties with `const { name, age } = user` |
+| `133_Spead.js` | Spread Operator | Copy & merge objects with `{ ...obj1, ...obj2 }` |
+| `134_Objects_GET_SET_Methods.js` | Getters & Setters | Computed properties using `get`/`set` keywords |
+| `136_Obj_REAL.js` | Real-World: ENV Config | ENV object with `BASE_URL`, `TIMEOUT`, `RETRIES` |
+| `137_Let_const_obj.js` | let vs const Objects | Mutation is allowed; reassignment with `const` is not |
+
+### Key Concepts
+
+```mermaid
+mindmap
+  root((Chapter 14 — Objects))
+    Creation
+      Literal {}
+      Constructor new Object()
+      Object.create()
+    Access
+      dot notation obj.key
+      bracket obj["key"]
+    Reference Types
+      Assign = alias, not clone
+      Spread to copy
+    Methods
+      Functions as values
+      this keyword
+    Modern Syntax
+      Destructuring
+      Spread ...
+      get / set
+```
+
+### Run them
+
+```bash
+node Chapter_14_objects.js/124_Objects.js                 # → object basics
+node Chapter_14_objects.js/128_Primitive_Ref.js           # → primitive vs reference copy
+node Chapter_14_objects.js/132_Obj_Decon.js               # → destructuring
+node Chapter_14_objects.js/133_Spead.js                   # → spread copy & merge
+node Chapter_14_objects.js/134_Objects_GET_SET_Methods.js # → getters & setters
+node Chapter_14_objects.js/136_Obj_REAL.js                # → ENV config object
+```
+
+### Key snippet — Primitive vs Reference
+
+```js
+// 128_Primitive_Ref.js
+let a = 10;
+let b = a;       // copy of value
+b = 99;
+console.log(a);  // 10 — unchanged
+
+let obj1 = { name: "Pramod" };
+let obj2 = obj1; // same reference
+obj2.name = "Harsh";
+console.log(obj1.name); // "Harsh" — both point to same object
+
+// Clone safely with spread
+let obj3 = { ...obj1 };
+obj3.name = "Alice";
+console.log(obj1.name); // "Harsh" — unaffected
+```
+
+| Pattern | Copies value? | Shares reference? |
+|:--------|:-------------:|:-----------------:|
+| `let b = a` (primitive) | ✅ | ❌ |
+| `let b = obj` (object) | ❌ | ✅ |
+| `let b = { ...obj }` (spread) | ✅ (shallow) | ❌ |
+
+---
+
+## 📖 What's in Chapter 15 — 2D Arrays (Available Now)
+
+### Files
+
+| File | Topic | What you'll learn |
+|------|-------|-------------------|
+| `138_2D_Array.js` | 2D Array Basics | Nested arrays, nested loops, `grid[i][j]` access |
+| `139_2d.js` | Matrix Dimensions | Rows × columns, boundary conditions |
+| `140_REAL.js` | Test Result Matrix | Real-world grid: `[testName, status, statusCode]` per row |
+| `141_2d_Array_Fn.js` | Row Aggregation | Sum and average per student score row |
+| `142_IQ_Right_Pattern_Py.js` | IQ — Star Pattern | Right-angle triangle with nested loops |
+| `testdata.csv` | Sample Data | CSV test data used in matrix examples |
+
+### Key Concepts
+
+```mermaid
+mindmap
+  root((Chapter 15 — 2D Arrays))
+    Structure
+      Array of arrays
+      grid[row][col]
+    Traversal
+      Outer loop = rows
+      Inner loop = columns
+    Real World
+      Test result tables
+      Student score grids
+    IQ Patterns
+      Star triangles
+      Boundary traps
+```
+
+### Run them
+
+```bash
+node Chapter_15_2D_array/138_2D_Array.js          # → print 3×3 grid
+node Chapter_15_2D_array/140_REAL.js              # → test result matrix
+node Chapter_15_2D_array/141_2d_Array_Fn.js       # → row sum & average
+node Chapter_15_2D_array/142_IQ_Right_Pattern_Py.js # → star triangle pattern
+```
+
+### Key snippet — Test Result Matrix
+
+```js
+// 140_REAL.js
+let testMatrix = [
+    ["login",    "pass", 200],
+    ["checkout", "fail", 404],
+    ["search",   "pass", 180]
+];
+
+for (let i = 0; i < testMatrix.length; i++) {
+    let [name, status, code] = testMatrix[i];
+    console.log(`${name} → ${status} (${code})`);
+}
+// login    → pass (200)
+// checkout → fail (404)
+// search   → pass (180)
+```
+
+---
+
+## 📖 What's in Chapter 16 — Callbacks (Available Now)
+
+### Files
+
+| File | Topic | What you'll learn |
+|------|-------|-------------------|
+| `143_Callback.js` | Callback Basics | Passing a function as an argument — three styles |
+| `144_CB.js` | Playwright-flavoured test() | How `test('title', callback)` works under the hood |
+| `145_CB_Fn.js` | Cafe Simulation | Real-world callback analogy — call when table is ready |
+| `146_PW_CB.js` | Hand-rolled test() | Build your own `test()` runner using callbacks |
+| `147_JS_CB.js` | Async Callback | `setTimeout` simulating an API delay |
+| `148_Sync_CB.js` | Sync Callback | `forEach` iterating test results — synchronous execution |
+| `149_Async_CB.js` | Event-loop Order | Async callback — understanding execution order |
+| `150_CB_Hell.js` | Callback Hell Intro | Nested callbacks for login/navigate/assert |
+| `151_CB_Hell_20_Steps.js` | Pyramid of Doom | 24-step E2E checkout as nested callbacks — why Promises fix this |
+| `152_CB_Parameter.js` | Callbacks with Params | Passing data into the callback function |
+| `153_CB_Return.js` | Returning from Callbacks | Higher-order `calculate()` — callbacks that return values |
+
+### Key Concepts
+
+```mermaid
+mindmap
+  root((Chapter 16 — Callbacks))
+    What is a Callback
+      Function passed as argument
+      Called later by the host fn
+    Three Styles
+      Named function
+      Anonymous function
+      Arrow function
+    Sync vs Async
+      forEach = sync
+      setTimeout = async
+    Problems
+      Callback hell
+      Pyramid of doom
+      Hard to read & debug
+    Solution Preview
+      Promises (Ch 17)
+      Async/Await (Ch 18)
+```
+
+### Run them
+
+```bash
+node Chapter_16_Callback/143_Callback.js          # → three callback styles
+node Chapter_16_Callback/147_JS_CB.js             # → async callback with setTimeout
+node Chapter_16_Callback/148_Sync_CB.js           # → sync forEach callback
+node Chapter_16_Callback/150_CB_Hell.js           # → callback hell intro
+node Chapter_16_Callback/151_CB_Hell_20_Steps.js  # → full pyramid of doom
+node Chapter_16_Callback/153_CB_Return.js         # → callback as return value
+```
+
+### Key snippet — Three Callback Styles
+
+```js
+// 143_Callback.js
+function print() {
+    console.log("Normal Function is called");
+}
+
+function placeOrder(item, callback) {
+    console.log("Order placed:", item);
+    callback();
+}
+
+// Style 1: named function reference
+placeOrder("Pizza", print);
+
+// Style 2: anonymous function
+placeOrder("Burger", function () {
+    console.log("Anonymous callback");
+});
+
+// Style 3: arrow function
+placeOrder("Momos", () => {
+    console.log("Arrow function callback");
+});
+```
+
+### Callback Hell (Why Promises exist)
+
+```js
+// 151_CB_Hell_20_Steps.js — 24-step E2E as nested callbacks
+openBrowser(function() {
+    goToLoginPage(function() {
+        enterCredentials(function() {
+            clickLogin(function() {
+                // ... 20 more nested levels
+            });
+        });
+    });
+});
+// Reading/debugging this = pyramid of doom — solved by Promises & async/await
+```
+
+| Callback Type | When executes | Example |
+|:-------------|:-------------:|---------|
+| Sync | Immediately, inline | `forEach`, `map`, `filter` |
+| Async | After delay/event | `setTimeout`, `fetch`, file I/O |
+| Return | Returns a value | `calculate(a, b, fn)` |
+
+---
+
 ## 🔭 What's Coming Next
 
 ```mermaid
 graph TD
-    subgraph next["Next Up — Objects & Advanced JS"]
-        N1[Ch 12: Functions ✅] --> N2[Ch 13: Strings ✅]
-        N2 --> N3[Ch 14: Objects]
-        N3 --> N4[Ch 15: 2D Arrays]
+    subgraph done["Completed"]
+        D1[Ch 13: Strings ✅] --> D2[Ch 14: Objects ✅]
+        D2 --> D3[Ch 15: 2D Arrays ✅]
+        D3 --> D4[Ch 16: Callbacks ✅]
     end
 
+    subgraph next["Next Up — Async JS"]
+        N1[Ch 17: Promises]
+        N2[Ch 18: Async / Await]
+        N3[Ch 19: OOP — Classes]
+        N4[Ch 20: Inheritance]
+    end
+
+    D4 --> N1 --> N2 --> N3 --> N4
+
+    style done fill:#e8f5e9,stroke:#2e7d32
     style next fill:#fff3e0,stroke:#e65100
 ```
 
@@ -2684,6 +2979,9 @@ graph TD
 - ✅ Chapter 11 — **Arrays**: creation, access, add/remove, splice, search, iterate, transform, sort, slice, concat, checking (files `83`–`96`)
 - ✅ Chapter 12 — **Functions**: four types, template literals, expressions, arrow functions, IIFE, default params, rest/spread, scope, closures, HOF, pure functions (files `96`–`117`)
 - ✅ Chapter 13 — **Strings**: literals, properties, search & check, substring, transform, conversion, anagram & palindrome tasks (files `118`–`123`)
+- ✅ Chapter 14 — **Objects**: literal, creation, primitive vs reference, destructuring, spread, getters/setters, real-world ENV config (files `124`–`137`)
+- ✅ Chapter 15 — **2D Arrays**: matrix traversal, test result grids, row aggregation, IQ patterns (files `138`–`142`)
+- ✅ Chapter 16 — **Callbacks**: three callback styles, sync vs async, callback hell, pyramid of doom, Playwright-style test() (files `143`–`153`)
 
 ---
 
