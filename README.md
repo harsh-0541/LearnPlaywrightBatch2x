@@ -59,10 +59,14 @@ graph TB
             adv1["Ch 14: Objects ✅"]
             adv2["Ch 15: 2D Arrays ✅"]
             adv3["Ch 16: Callbacks ✅"]
-            adv4["Ch 17: Promises"]
-            adv5["Ch 18: Async / Await"]
+            adv4["Ch 17: Promises ✅"]
+            adv5["Ch 18: Async / Await ✅"]
             adv6["Ch 19: OOP - Classes"]
             adv7["Ch 20: Inheritance"]
+        end
+
+        subgraph pw_intro["🎭 Playwright Intro (Week 8+)"]
+            pw_intro1["Ch 19: Playwright Automation ✅"]
         end
 
         subgraph ts["🟦 TypeScript (Week 9)"]
@@ -274,6 +278,32 @@ LearnPlaywrightBatch2x/
 │   ├── 151_CB_Hell_20_Steps.js         # Pyramid of doom — 24-step E2E checkout as nested callbacks
 │   ├── 152_CB_Parameter.js             # Callbacks with parameters — greeting + callback invocation
 │   └── 153_CB_Return.js                # Returning values from callbacks — calculate() higher-order fn
+│
+├── Chapter_17_promises/                ✅ Promises — resolve/reject, .then/.catch/.finally, Promise.all/allSettled
+│   ├── 154_Promise.js                  # Promise basics — new Promise, resolve, reject
+│   ├── 155_Promise_REAL_API.js         # Real API simulation — .then() on resolve
+│   ├── 156_Promise_REAL_API_PART2.js   # Promise chaining — .then().catch() for API calls
+│   ├── 157_Finally.js                  # .finally() — cleanup that always runs
+│   ├── 158_Call_Py_Problem.js          # Callback-to-Promise migration — real problem solved
+│   ├── 159_Promise_ALL.js              # Promise.all vs Promise.allSettled — parallel checks
+│   └── 160_Promise_IQ.js              # Interview Qs — chaining, value passing, catch flow
+│
+├── chapter_18_Async_Await/             ✅ Async/Await — modern async syntax, try/catch, parallel execution
+│   ├── 161_Async.js                    # async function basics — await, try/catch, finally
+│   ├── 162_Aysnc_P2.js                 # async Part 2 — sequential vs parallel calls
+│   ├── 163_PyODom.js                   # Async DOM simulation — awaiting element-ready checks
+│   ├── 164_Async_Ex.js                 # Async examples — real-world login flow with await
+│   ├── 165_AA_Parallel.js              # Parallel execution — Promise.allSettled + destructuring
+│   ├── 166_IQ.js                       # Interview Qs — async return value, error propagation
+│   └── 167_ACLogin.js                  # Async login simulation — await login + assertions
+│
+├── Chapter_19_Playwright_Automation/   ✅ Playwright — first tests, codegen, assertions, config
+│   ├── examples.spec.ts                # First Playwright test — page.goto, toHaveTitle, test.only
+│   ├── Codegen_Invalid.spec.ts         # Codegen anti-pattern — brittle, non-semantic locators
+│   ├── playwright.config.ts            # Playwright config — testDir, retries, reporter, projects
+│   └── tests/                          # Codegen-generated specs (valid vs invalid comparison)
+│       ├── codegen_valid.spec.ts       # Valid codegen output — semantic & role-based locators
+│       └── Codegen_Invalid.spec.ts     # Invalid codegen — positional / text-exact selectors
 │
 └── README.md                           👋 You are here
 ```
@@ -2944,21 +2974,292 @@ openBrowser(function() {
 
 ---
 
+## 📖 What's in Chapter 17 — Promises (Available Now)
+
+### Files
+
+| File | Topic | What you'll learn |
+|------|-------|-------------------|
+| `154_Promise.js` | Promise basics | `new Promise(resolve, reject)` — the two outcomes |
+| `155_Promise_REAL_API.js` | Real API simulation | `.then()` runs only when promise resolves |
+| `156_Promise_REAL_API_PART2.js` | Promise chaining | `.then().catch()` for happy path + error path |
+| `157_Finally.js` | `.finally()` | Cleanup block that always runs — pass or fail |
+| `158_Call_Py_Problem.js` | Callback → Promise | Rewrite a callback-hell problem as a clean Promise chain |
+| `159_Promise_ALL.js` | Parallel promises | `Promise.all` (fail-fast) vs `Promise.allSettled` (all results) |
+| `160_Promise_IQ.js` | Interview Qs | Chaining, value passing through `.then`, catch flow |
+
+### Key Concepts
+
+```mermaid
+mindmap
+  root((Chapter 17 — Promises))
+    States
+      Pending
+      Fulfilled
+      Rejected
+    Consumers
+      .then — on success
+      .catch — on failure
+      .finally — always runs
+    Chaining
+      return value flows to next .then
+      throw / reject jumps to .catch
+    Parallel
+      Promise.all — fail fast
+      Promise.allSettled — all outcomes
+    vs Callbacks
+      No pyramid of doom
+      Linear .then chains
+      Catchable errors
+```
+
+### Run them
+
+```bash
+node Chapter_17_promises/154_Promise.js          # → Promise { 'Pizza is delivered...' }
+node Chapter_17_promises/155_Promise_REAL_API.js # → 200 (from resolved API mock)
+node Chapter_17_promises/157_Finally.js          # → resolved value + "finally always runs"
+node Chapter_17_promises/159_Promise_ALL.js      # → allSettled: fulfilled + rejected results
+node Chapter_17_promises/160_Promise_IQ.js       # → chaining IQ answers
+```
+
+### Key snippet — Promise basics
+
+```js
+// 154_Promise.js
+let order = new Promise(function (resolve, reject) {
+    let foodready = true;
+    if (foodready) {
+        resolve("Pizza is delivered. Food is ready.");
+    } else {
+        reject("Order cancelled because of rain.");
+    }
+});
+
+order
+    .then(function (msg) { console.log("Success:", msg); })
+    .catch(function (err) { console.log("Error:", err); })
+    .finally(function ()  { console.log("Order flow complete."); });
+```
+
+### Promise.all vs Promise.allSettled
+
+```js
+// 159_Promise_ALL.js
+Promise.allSettled([
+    Promise.resolve("Test A Passed!"),
+    Promise.reject("Test B Failed!"),
+    Promise.resolve("Test C Passed!"),
+]).then(function (results) {
+    results.forEach(r => console.log(r.status, r.value ?? r.reason));
+});
+// fulfilled Test A Passed!
+// rejected  Test B Failed!
+// fulfilled Test C Passed!
+```
+
+| Method | Resolves when | Rejects when | Use when |
+|:-------|:-------------|:------------|:---------|
+| `Promise.all` | ALL resolve | ANY rejects | All steps must pass (e.g. setup) |
+| `Promise.allSettled` | ALL settle (either way) | Never rejects | Want every result regardless of failure |
+
+---
+
+## 📖 What's in Chapter 18 — Async / Await (Available Now)
+
+### Files
+
+| File | Topic | What you'll learn |
+|------|-------|-------------------|
+| `161_Async.js` | async basics | `async function`, `await`, `try/catch/finally` |
+| `162_Aysnc_P2.js` | Async Part 2 | Sequential vs parallel — when `await` matters |
+| `163_PyODom.js` | Async DOM simulation | Awaiting element-ready checks — Playwright analogy |
+| `164_Async_Ex.js` | Real examples | Async login flow step-by-step with `await` |
+| `165_AA_Parallel.js` | Parallel execution | `Promise.allSettled` + array destructuring — run N calls together |
+| `166_IQ.js` | Interview Qs | Async return value, error propagation, execution order |
+| `167_ACLogin.js` | Async login sim | Full async login + assertion simulation — blueprint for PW tests |
+
+### Key Concepts
+
+```mermaid
+mindmap
+  root((Chapter 18 — Async/Await))
+    async function
+      always returns a Promise
+      await pauses only inside async
+    await
+      unwraps Promise value
+      pauses execution until settled
+    Error handling
+      try / catch replaces .catch
+      finally for cleanup
+    Sequential vs Parallel
+      sequential: await one then next
+      parallel: Promise.allSettled + await
+    Playwright connection
+      every page action is async/await
+      test fn is async
+      await page.goto, click, fill, expect
+```
+
+### Run them
+
+```bash
+node chapter_18_Async_Await/161_Async.js       # → async basics + try/catch/finally
+node chapter_18_Async_Await/164_Async_Ex.js    # → async login flow
+node chapter_18_Async_Await/165_AA_Parallel.js # → 3 parallel API calls via allSettled
+node chapter_18_Async_Await/167_ACLogin.js     # → full async login simulation
+```
+
+### Key snippet — async/await with try/catch
+
+```js
+// 161_Async.js
+async function testapi() {
+    try {
+        let result = await Promise.reject("503 reject");
+    } catch (error) {
+        console.log('Error', error);   // Error 503 reject
+    } finally {
+        console.log("Clean up!!");     // always runs
+    }
+}
+testapi();
+```
+
+### Parallel execution pattern
+
+```js
+// 165_AA_Parallel.js — run 3 API calls at once, wait for all
+async function parallelTest() {
+    let [r1, r2, r3] = await Promise.allSettled([
+        apiCall("Auth Service"),
+        apiCall("User Account Creation"),
+        apiCall("Support Page API")
+    ]);
+    console.log(r1.value, r2.value, r3.value);
+}
+```
+
+| Pattern | Code | When to use |
+|:--------|:-----|:------------|
+| Sequential | `let a = await f1(); let b = await f2(a);` | Step 2 depends on Step 1 |
+| Parallel | `let [a, b] = await Promise.allSettled([f1(), f2()])` | Steps are independent |
+
+---
+
+## 📖 What's in Chapter 19 — Playwright Automation (Available Now)
+
+### Files
+
+| File | Topic | What you'll learn |
+|------|-------|-------------------|
+| `examples.spec.ts` | First Playwright test | `test.only`, `page.goto`, `expect(page).toHaveTitle`, `waitForTimeout` |
+| `Codegen_Invalid.spec.ts` | Anti-pattern codegen | Brittle / fragile locators produced by naive codegen |
+| `tests/codegen_valid.spec.ts` | Valid codegen | Semantic, role-based locators — what good codegen output looks like |
+| `tests/Codegen_Invalid.spec.ts` | Invalid codegen | Side-by-side comparison — positional vs semantic selectors |
+| `playwright.config.ts` | Playwright config | `testDir`, `fullyParallel`, `retries`, `reporter: html`, `projects` |
+
+### Setup
+
+```bash
+cd Chapter_19_Playwright_Automation
+
+# Install Playwright + browsers
+npm install
+npx playwright install
+
+# Run all tests
+npx playwright test
+
+# Run with UI mode
+npx playwright test --ui
+
+# Open HTML report after a run
+npx playwright show-report
+```
+
+### Key Concepts
+
+```mermaid
+mindmap
+  root((Chapter 19 — Playwright))
+    Test structure
+      import test, expect
+      test&#40;title, async fn&#41;
+      async &#40;{ page }&#41; =>
+    Navigation
+      page.goto&#40;url&#41;
+      page.waitForTimeout&#40;ms&#41;
+    Assertions
+      expect&#40;page&#41;.toHaveTitle
+      expect&#40;locator&#41;.toBeHidden
+      expect&#40;locator&#41;.toBeVisible
+    Config
+      testDir
+      fullyParallel
+      retries
+      reporter html
+      projects Chromium
+    Codegen
+      npx playwright codegen url
+      valid — role-based locators
+      invalid — fragile nth / text selectors
+```
+
+### Key snippet — first test
+
+```ts
+// examples.spec.ts
+import { test, expect } from '@playwright/test';
+
+test.only('Validate the title of page', async ({ page }) => {
+    await page.goto("https://app.thetestingacademy.com/playwright/ttacart/");
+    await expect(page).toHaveTitle("TTACart - Login");
+    await page.waitForTimeout(5000);
+});
+```
+
+### playwright.config.ts highlights
+
+```ts
+export default defineConfig({
+    testDir: './tests',
+    fullyParallel: true,
+    forbidOnly: !!process.env.CI,   // fail CI if test.only slips through
+    retries: process.env.CI ? 2 : 0,
+    reporter: 'html',
+    use: { trace: 'on-first-retry' },
+    projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'] } }],
+});
+```
+
+| Config key | What it does |
+|:-----------|:-------------|
+| `testDir` | Folder where Playwright looks for spec files |
+| `fullyParallel` | Run tests across files in parallel |
+| `forbidOnly` | Blocks `test.only` from landing in CI |
+| `retries` | Auto-retry flaky tests on CI |
+| `reporter: 'html'` | Generates a rich HTML test report |
+| `trace: 'on-first-retry'` | Captures network/DOM trace on first retry |
+
+---
+
 ## 🔭 What's Coming Next
 
 ```mermaid
 graph TD
     subgraph done["Completed"]
-        D1[Ch 13: Strings ✅] --> D2[Ch 14: Objects ✅]
-        D2 --> D3[Ch 15: 2D Arrays ✅]
-        D3 --> D4[Ch 16: Callbacks ✅]
+        D1[Ch 16: Callbacks ✅] --> D2[Ch 17: Promises ✅]
+        D2 --> D3[Ch 18: Async / Await ✅]
+        D3 --> D4[Ch 19: Playwright Intro ✅]
     end
 
-    subgraph next["Next Up — Async JS"]
-        N1[Ch 17: Promises]
-        N2[Ch 18: Async / Await]
-        N3[Ch 19: OOP — Classes]
-        N4[Ch 20: Inheritance]
+    subgraph next["Next Up"]
+        N1[OOP — Classes]
+        N2[OOP — Inheritance]
+        N3[TypeScript Fundamentals]
+        N4[Playwright: Locators & Assertions]
     end
 
     D4 --> N1 --> N2 --> N3 --> N4
@@ -2982,6 +3283,9 @@ graph TD
 - ✅ Chapter 14 — **Objects**: literal, creation, primitive vs reference, destructuring, spread, getters/setters, real-world ENV config (files `124`–`137`)
 - ✅ Chapter 15 — **2D Arrays**: matrix traversal, test result grids, row aggregation, IQ patterns (files `138`–`142`)
 - ✅ Chapter 16 — **Callbacks**: three callback styles, sync vs async, callback hell, pyramid of doom, Playwright-style test() (files `143`–`153`)
+- ✅ Chapter 17 — **Promises**: resolve/reject, `.then/.catch/.finally`, chaining, `Promise.all`, `Promise.allSettled`, IQ traps (files `154`–`160`)
+- ✅ Chapter 18 — **Async/Await**: async functions, `try/catch/finally`, sequential vs parallel, `Promise.allSettled`, Playwright analogy (files `161`–`167`)
+- ✅ Chapter 19 — **Playwright Automation**: first tests, `page.goto`, `toHaveTitle`, `test.only`, codegen valid vs invalid, `playwright.config.ts`
 
 ---
 
