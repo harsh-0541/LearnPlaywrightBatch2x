@@ -61,8 +61,8 @@ graph TB
             adv3["Ch 16: Callbacks ✅"]
             adv4["Ch 17: Promises ✅"]
             adv5["Ch 18: Async / Await ✅"]
-            adv6["Ch 19: OOP - Classes"]
-            adv7["Ch 20: Inheritance"]
+            adv6["Ch 20: OOP — ES Modules & Classes ✅"]
+            adv7["Ch 21: Inheritance"]
         end
 
         subgraph pw_intro["🎭 Playwright Intro (Week 8+)"]
@@ -304,6 +304,26 @@ LearnPlaywrightBatch2x/
 │   └── tests/                          # Codegen-generated specs (valid vs invalid comparison)
 │       ├── codegen_valid.spec.ts       # Valid codegen output — semantic & role-based locators
 │       └── Codegen_Invalid.spec.ts     # Invalid codegen — positional / text-exact selectors
+│
+├── Chapter_20_OOPS_concept/            ✅ OOP — ES Modules (export/import) & Classes
+│   ├── 01_EXPORT_IMPORT/               # Named & default exports
+│   │   ├── 168_EXPORT_IMPORT.js        # Basic import syntax — named exports
+│   │   ├── 169_Utils.js                # Named imports with `as` alias for name clashes
+│   │   ├── 170_Logger.js               # Default import — no braces required
+│   │   └── ExplainDefault.md           # Full named vs default export reference
+│   ├── 02_CLASS_OBJECT/                # Classes — constructors, methods, fields
+│   │   ├── 171_Class_Object.js         # Class syntax — attributes & behaviour methods
+│   │   ├── 172_Class_Object2.js        # Constructor — runs on every `new` call
+│   │   ├── 173_Car.js                  # Class with constructor + drive() method
+│   │   ├── 174_REAL_Browser.js         # Real-world TestCase class with display()
+│   │   ├── 175_IQ.js                   # Browser class — multi-instance IQ
+│   │   ├── 176_Private_Public.js       # Private fields (#) vs public fields
+│   │   ├── 177_Statis.js               # Static properties & shared class methods
+│   │   └── 178_Statis.js               # Static nationality example
+│   ├── logger.js                       # Module with default export (log) + named (log2)
+│   ├── testutils.js                    # Named exports — BASE_URL, formatUpperCaseString
+│   ├── utils.js                        # Named exports — BASE_URL, formatTestName
+│   └── interview.md                    # Interview Q&A — `const` with objects & Object.freeze
 │
 └── README.md                           👋 You are here
 ```
@@ -3245,6 +3265,148 @@ export default defineConfig({
 
 ---
 
+## 📖 What's in Chapter 20 — OOP: ES Modules & Classes (Available Now)
+
+### Part 1 — ES Modules (Export / Import)
+
+| File | Topic | What you'll learn |
+|------|-------|-------------------|
+| `utils.js` | Named exports | `export let`, `export function` — multiple exports per file |
+| `testutils.js` | Named exports | A second module exporting `BASE_URL` and a helper |
+| `logger.js` | Default + named | `export default function` alongside a named `export function` |
+| `168_EXPORT_IMPORT.js` | Basic import | `import { BASE_URL, formatTestName } from` — curly-brace syntax |
+| `169_Utils.js` | Named alias | `import { BASE_URL as bul_util }` — resolve name collisions with `as` |
+| `170_Logger.js` | Default import | `import log from` — no braces for the default export |
+| `ExplainDefault.md` | Full reference | Named vs default side-by-side, when to use each, mixing both |
+
+### Part 2 — Classes & OOP
+
+| File | Topic | What you'll learn |
+|------|-------|-------------------|
+| `171_Class_Object.js` | Class basics | Class syntax — attributes (fields) and behaviour (methods) |
+| `172_Class_Object2.js` | Constructor | `constructor()` runs automatically on every `new ClassName()` call |
+| `173_Car.js` | Constructor + method | Passing data into a class via constructor; `this.name` |
+| `174_REAL_Browser.js` | Real-world class | `TestCase` class — constructor with `name/status/priority` + `display()` |
+| `175_IQ.js` | Multi-instance IQ | `Browser` class — each instance tracks own `name` and `isOpen` |
+| `176_Private_Public.js` | Private fields `#` | `#apiKey` — truly private, inaccessible outside the class |
+| `177_Statis.js` | Static members | `static` property and `static display()` — shared across all instances |
+| `178_Statis.js` | Static property | `static nationality` — belongs to the class, not any instance |
+
+### Key Concepts
+
+```mermaid
+mindmap
+  root((Chapter 20 — OOP))
+    ES Modules
+      Named export
+        export let / function
+        import { x } from
+        alias with as
+      Default export
+        export default
+        import x from
+        any name on import
+      Mix both
+        import x, { y } from
+    Classes
+      class keyword
+      constructor&#40;&#41;
+        runs on new
+        this.prop = arg
+      Instance methods
+        behaviours on objects
+      Private fields
+        hash prefix
+        inaccessible outside
+      Static members
+        class-level data
+        no instance needed
+```
+
+### Run them
+
+```bash
+# ES Modules (requires Node with --experimental-vm-modules or .mjs / package.json "type":"module")
+node Chapter_20_OOPS_concept/01_EXPORT_IMPORT/169_Utils.js
+node Chapter_20_OOPS_concept/01_EXPORT_IMPORT/170_Logger.js
+
+# Classes
+node Chapter_20_OOPS_concept/02_CLASS_OBJECT/173_Car.js        # → "i am driving Model S"
+node Chapter_20_OOPS_concept/02_CLASS_OBJECT/174_REAL_Browser.js
+node Chapter_20_OOPS_concept/02_CLASS_OBJECT/176_Private_Public.js
+node Chapter_20_OOPS_concept/02_CLASS_OBJECT/177_Statis.js
+```
+
+### Key snippets
+
+**Named vs default exports:**
+
+```js
+// utils.js — named exports (many allowed per file)
+export let BASE_URL = "https://api.staging.com";
+export function formatTestName(name) { return "TC_" + name.toUpperCase(); }
+
+// logger.js — default export (only one per file) + a named export
+export default function log(message) { console.log("[LOG]", message); }
+export function log2(message) { console.log("[LOGS]", message); }
+
+// Consuming both in one import
+import log, { log2 } from "../logger.js";   // default first, named in braces
+```
+
+**Class with constructor and private field:**
+
+```js
+// 176_Private_Public.js
+class Credentials {
+    #apiKey;   // private — only accessible inside this class
+    user;      // public
+
+    constructor(user, key) {
+        this.user = user;
+        this.#apiKey = key;
+    }
+
+    pramodgetAuthHeader() {
+        return "Bearer " + this.#apiKey;  // OK — inside the class
+    }
+}
+
+const creds = new Credentials("pramod", "secret-key-123");
+console.log(creds.user);                  // "pramod"
+// console.log(creds.#apiKey);            // ❌ SyntaxError — private!
+console.log(creds.pramodgetAuthHeader()); // "Bearer secret-key-123"
+```
+
+**Static members — shared across instances:**
+
+```js
+// 177_Statis.js
+class Student {
+    static name = "Playwright2x";
+    static mentor_name = "PramodDutta";
+    static display() { console.log("Hi, I am common fn"); }
+
+    constructor(name_student, age, phoneNo) {
+        this.name_student = name_student;
+        this.age = age;
+        this.phoneNo = phoneNo;
+    }
+}
+
+Student.display();               // call without any instance
+console.log(Student.name);       // "Playwright2x" — class-level, not instance
+```
+
+| Concept | Keyword | Accessible on |
+|:--------|:--------|:-------------|
+| Public field | *(none)* | instance and outside |
+| Private field | `#` prefix | inside the class only |
+| Static property | `static` | the class itself (`ClassName.prop`) |
+| Static method | `static` | the class itself — no `new` needed |
+
+---
+
 ## 🔭 What's Coming Next
 
 ```mermaid
@@ -3253,16 +3415,16 @@ graph TD
         D1[Ch 16: Callbacks ✅] --> D2[Ch 17: Promises ✅]
         D2 --> D3[Ch 18: Async / Await ✅]
         D3 --> D4[Ch 19: Playwright Intro ✅]
+        D4 --> D5[Ch 20: OOP — ES Modules & Classes ✅]
     end
 
     subgraph next["Next Up"]
-        N1[OOP — Classes]
-        N2[OOP — Inheritance]
-        N3[TypeScript Fundamentals]
-        N4[Playwright: Locators & Assertions]
+        N1[OOP — Inheritance]
+        N2[TypeScript Fundamentals]
+        N3[Playwright: Locators & Assertions]
     end
 
-    D4 --> N1 --> N2 --> N3 --> N4
+    D5 --> N1 --> N2 --> N3
 
     style done fill:#e8f5e9,stroke:#2e7d32
     style next fill:#fff3e0,stroke:#e65100
@@ -3286,6 +3448,7 @@ graph TD
 - ✅ Chapter 17 — **Promises**: resolve/reject, `.then/.catch/.finally`, chaining, `Promise.all`, `Promise.allSettled`, IQ traps (files `154`–`160`)
 - ✅ Chapter 18 — **Async/Await**: async functions, `try/catch/finally`, sequential vs parallel, `Promise.allSettled`, Playwright analogy (files `161`–`167`)
 - ✅ Chapter 19 — **Playwright Automation**: first tests, `page.goto`, `toHaveTitle`, `test.only`, codegen valid vs invalid, `playwright.config.ts`
+- ✅ Chapter 20 — **OOP — ES Modules & Classes**: named/default exports, `import as` aliasing, class syntax, constructors, `this`, private fields `#`, static members (files `168`–`178`)
 
 ---
 
