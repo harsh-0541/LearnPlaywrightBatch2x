@@ -55,26 +55,29 @@ graph TB
             ch12_fn["Ch 12: Functions & Strings ✅"]
         end
 
-        subgraph adv["⚙️ Advanced JS (Weeks 7–8)"]
+        subgraph adv["⚙️ Advanced JS / OOP (Weeks 7–9)"]
             adv1["Ch 14: Objects ✅"]
             adv2["Ch 15: 2D Arrays ✅"]
             adv3["Ch 16: Callbacks ✅"]
             adv4["Ch 17: Promises ✅"]
             adv5["Ch 18: Async / Await ✅"]
             adv6["Ch 20: OOP — ES Modules & Classes ✅"]
-            adv7["Ch 21: Inheritance"]
+            adv7["Ch 22: Encapsulation ✅"]
+            adv8["Ch 23: Inheritance ✅"]
+            adv9["Ch 24: Polymorphism ✅"]
+            adv10["Ch 25: OOP Interview Qs ✅"]
         end
 
         subgraph pw_intro["🎭 Playwright Intro (Week 8+)"]
             pw_intro1["Ch 19: Playwright Automation ✅"]
         end
 
-        subgraph ts["🟦 TypeScript (Week 9)"]
-            ts1["Ch 19: TS Fundamentals"]
-            ts2["Ch 20: Interfaces"]
-            ts3["Ch 21: Enums"]
-            ts4["Ch 22: Generics"]
-            ts5["Ch 23: Access Modifiers & Decorators"]
+        subgraph ts["🟦 TypeScript (Week 9–10)"]
+            ts1["Ch 26: TS Fundamentals ✅"]
+            ts2["Ch 27: Interfaces ✅"]
+            ts3["Ch 28: Enums"]
+            ts4["Ch 29: Generics"]
+            ts5["Ch 30: Access Modifiers & Decorators"]
         end
 
         subgraph pw["🎭 Playwright (Weeks 10–12)"]
@@ -324,6 +327,49 @@ LearnPlaywrightBatch2x/
 │   ├── testutils.js                    # Named exports — BASE_URL, formatUpperCaseString
 │   ├── utils.js                        # Named exports — BASE_URL, formatTestName
 │   └── interview.md                    # Interview Q&A — `const` with objects & Object.freeze
+│
+├── chapter_22_Encapsulation/           ✅ Encapsulation — private fields & public method gates
+│   ├── 179_Ecap.js                     # #balance private; deposit()/getBalance() are the only doors
+│   ├── 180_REAK_EXAMPLE.js             # Getter/setter for private #child1
+│   ├── 181_Ecap_Car.js                 # getEngine/setEngine wrap a private #engine
+│   └── 182_ECap_Bank.js                # Guarded setter — setBalance mutates only when isCashier
+│
+├── chapter_23_Inheritance/             ✅ Inheritance — extends, super(), multi-level & POM
+│   ├── 183_Single_Inheritance.js       # LoginPage extends BasePage — child reuses open()/close()
+│   ├── 184_SI_Example.js               # super(name) calls the parent constructor first
+│   ├── 185_Single_Inheritance_Con.js   # Child setup() overrides parent's
+│   ├── 186_IQ.js                       # super.method() — call parent's version then add to it
+│   ├── 187_IQ2.js                      # Polymorphic loop — one array, each execute() differs
+│   ├── 188_REAL_PageObject_Model.js    # Real POM: BasePage → Login/Dashboard/Cart, each verify()
+│   ├── 189_Multiple_Inheritance.js     # extends A, B is a SyntaxError in JS
+│   ├── 190_Multiple_Level_Inheritance.js # BasePage → AuthPage → AdminPage
+│   └── 191_Hierarchial_Inheritance.js  # One parent, many children
+│
+├── chapter_24_Polymorphism/            ✅ Polymorphism — method overriding, many forms
+│   └── 192_Method_Overriding.js        # Same setup() name, subclass supplies its own body
+│
+├── chapter_25_OOP_Interview_Questions/ ✅ OOP Interview Drills — class basics, chaining, this
+│   ├── EX1.js                          # Bug class — fields + display() method
+│   ├── EX2.js                          # Constructor default params (name="staging", port=3000)
+│   ├── EX3.js                          # this per object — each instance has its own this.name
+│   └── EX4.js                          # return this enables method chaining (.increment().display())
+│
+├── chapter_26_Typescript/              ✅ TypeScript — type annotations, primitives, functions
+│   ├── 193_TS.js                       # TS compiled output — hello world
+│   ├── 194_TS_HelloWorld.js            # TS compiled output — typed greeting
+│   ├── 194_TS_HelloWorld.ts            # First .ts file — string parameter with :void
+│   ├── 195_TS_Part1.ts                 # Primitive types: string, number, boolean, null, any, unknown
+│   ├── 196_TS_Part2.ts                 # Arrays: number[], Array<string>
+│   ├── 197_TS_Part2.ts                 # Typed variables + console output
+│   ├── 198_Part3.ts                    # Function return types: string, void, never
+│   ├── 199_IQ.ts                       # Real-world typed helpers: buildEndpoint, isSuccessCode, logTestStep
+│   └── 200_IQ.ts                       # Typed array + filter: getFailedCodes(codes: number[])
+│
+├── chapter_27_TypeScript_Interface/    ✅ TypeScript Interfaces — shape, optional, readonly
+│   ├── 201_IF.ts                       # interface TestCase — typed shape for test objects
+│   ├── 202_IF_Part2.ts                 # interface APIResponse — optional fields with ?
+│   ├── 203_IF_READONLY.ts              # readonly statusCode — can't mutate after creation
+│   └── 204_IF_READOnly.ts              # readonly on primitive + ReadonlyArray
 │
 └── README.md                           👋 You are here
 ```
@@ -3407,6 +3453,453 @@ console.log(Student.name);       // "Playwright2x" — class-level, not instance
 
 ---
 
+## 📖 What's in Chapter 22 — Encapsulation (Available Now)
+
+> 🔗 **Full walk-through:** [chapter_22_Encapsulation/README.md](./chapter_22_Encapsulation/README.md)
+
+### Files
+
+| File | Topic | What you'll learn |
+|------|-------|-------------------|
+| `179_Ecap.js` | Hide state | `#balance` is private; `deposit()` / `getBalance()` are the only doors |
+| `180_REAK_EXAMPLE.js` | Getter / setter | Read `#child1` via `getChild1()`, change via `setChild1()` |
+| `181_Ecap_Car.js` | Controlled access | `getEngine` / `setEngine` wrap a private `#engine` |
+| `182_ECap_Bank.js` | Guarded setter | `setBalance` mutates only when `isCashier` — validation on write |
+
+### Key Concepts
+
+**Concept:** Encapsulation = private field + public method gate. The method is where the **rules** live — outside code can't corrupt internals.
+
+**Why it matters in Playwright:** A Page Object hides its locators (`#usernameField`) and exposes `login()` — callers can't fiddle with selectors.
+
+```mermaid
+flowchart LR
+    Caller -->|deposit&#40;100&#41;| M[public method]
+    Caller -.->|"account.#balance ❌"| X[blocked]
+    M -->|validates then writes| P["#balance (private)"]
+    M -->|getBalance&#40;&#41;| Caller
+    style P fill:#ffebee,stroke:#c62828
+    style X fill:#ffebee,stroke:#c62828
+```
+
+### Key snippet
+
+```js
+// 182_ECap_Bank.js — setter guards the write
+class ICICI {
+  #balance;
+  constructor(name, balance) { this.name = name; this.#balance = balance; }
+  getBalance() { return this.#balance; }
+  setBalance(balance, isCashier) {
+    if (isCashier) this.#balance = balance;
+    else console.log("Not allowed");   // validation on write
+  }
+}
+let acc = new ICICI("Pramod", 1000);
+acc.setBalance(10000000, false);  // Not allowed
+acc.setBalance(300000, true);     // ok — cashier
+```
+
+### Run them
+
+```bash
+node chapter_22_Encapsulation/179_Ecap.js
+node chapter_22_Encapsulation/182_ECap_Bank.js
+```
+
+---
+
+## 📖 What's in Chapter 23 — Inheritance (Available Now)
+
+> 🔗 **Full walk-through:** [chapter_23_Inheritance/README.md](./chapter_23_Inheritance/README.md)
+
+### Files
+
+| File | Topic | What you'll learn |
+|------|-------|-------------------|
+| `183_Single_Inheritance.js` | `extends` | `LoginPage extends BasePage` — child reuses `open()`/`close()` |
+| `184_SI_Example.js` | `super()` | `super(name)` runs the parent constructor first |
+| `185_Single_Inheritance_Con.js` | Override | Child `setup()` replaces parent's |
+| `186_IQ.js` | `super.method()` | Call the parent's version, then add to it |
+| `187_IQ2.js` | Polymorphic loop | One array of subclasses, each `execute()` differs |
+| `188_REAL_PageObject_Model.js` | Real POM | `BasePage` → `Login`/`Dashboard`/`Cart`, each `verify()` |
+| `189_Multiple_Inheritance.js` | Not allowed | `extends A, B` is a `SyntaxError` in JS |
+| `190_Multiple_Level_Inheritance.js` | Multi-level | `BasePage` → `AuthPage` → `AdminPage` |
+| `191_Hierarchial_Inheritance.js` | Hierarchical | One parent, many children |
+
+### Key Concepts
+
+**Concept:** A child class `extends` a parent — reusing its fields/methods, adding its own, optionally overriding. `super(...)` calls the parent constructor; `super.method()` calls the parent's method.
+
+**Why:** Every Page Object inherits `open()`/`close()` from `BasePage` — write it once, reuse everywhere.
+
+```mermaid
+classDiagram
+    BasePage <|-- LoginPage
+    BasePage <|-- DashboardPage
+    BasePage <|-- CartPage
+    BasePage : +open()
+    BasePage : +close()
+    LoginPage : +verify()
+    DashboardPage : +verify()
+    CartPage : +verify()
+```
+
+### Key snippets
+
+```js
+// 184_SI_Example.js — extends + super()
+class Animal {
+  constructor(name) { this.name = name; }
+  eat() { console.log(this.name + " is eating"); }
+}
+class Dog extends Animal {
+  constructor(name, breed) {
+    super(name);          // parent constructor first
+    this.breed = breed;
+  }
+  bark() { console.log(this.name + " is barking!"); }
+}
+const dog = new Dog("Rex", "Labrador");
+dog.eat();   // inherited
+dog.bark();  // own method
+
+// 186_IQ.js — override but keep parent via super.method()
+class UITest extends BaseTest {
+  setup() {
+    super.setup();                       // run parent's setup
+    console.log("UI: maximize window");  // then add to it
+  }
+}
+```
+
+### Run them
+
+```bash
+node chapter_23_Inheritance/184_SI_Example.js
+node chapter_23_Inheritance/186_IQ.js
+node chapter_23_Inheritance/190_Multiple_Level_Inheritance.js
+node chapter_23_Inheritance/188_REAL_PageObject_Model.js
+```
+
+---
+
+## 📖 What's in Chapter 24 — Polymorphism (Available Now)
+
+> 🔗 **Full walk-through:** [chapter_24_Polymorphism/README.md](./chapter_24_Polymorphism/README.md)
+
+### Files
+
+| File | Topic | What you'll learn |
+|------|-------|-------------------|
+| `192_Method_Overriding.js` | Method overriding | Same `setup()` name, subclass supplies its own body |
+
+### Key Concepts
+
+**Concept:** "Many forms." The same method name (`setup()`, `execute()`, `verify()`) behaves differently depending on the object's actual class. Calling code stays identical.
+
+**Why:** Loop over a mixed list of objects and call one method — each does the right thing. No `if (type === ...)` ladders. A runner loops `pages.forEach(p => p.verify())`; each Page Object's `verify()` runs its own checks.
+
+**Q&A:**
+- **Q: Overriding vs overloading?** A: JS does **overriding** (child redefines a parent method). It has no true overloading — last definition wins.
+- **Q: How is it "many forms"?** A: `test.execute()` runs unit, API, or E2E logic depending on which subclass `test` is.
+
+```js
+// 192_Method_Overriding.js — same name, different body
+class BaseTest {
+  setup() { console.log("Base: open browser"); }
+}
+class APIPage extends BaseTest {
+  setup() { console.log("APITest: open browser"); }  // overrides
+}
+new APIPage().setup();   // APITest: open browser
+```
+
+### Run them
+
+```bash
+node chapter_24_Polymorphism/192_Method_Overriding.js
+```
+
+---
+
+## 📖 What's in Chapter 25 — OOP Interview Questions (Available Now)
+
+> 🔗 **Full walk-through:** [chapter_25_OOP_Interview_Questions/README.md](./chapter_25_OOP_Interview_Questions/README.md)
+
+### Files
+
+| File | Topic | What you'll learn |
+|------|-------|-------------------|
+| `EX1.js` | Class basics | `Bug` class — fields + a `display()` method |
+| `EX2.js` | Default params | Constructor with default values (`name = "staging"`) |
+| `EX3.js` | `this` per object | Each instance carries its own `this.name` |
+| `EX4.js` | Method chaining | `return this` lets you chain `.increment().display()` |
+
+### Key Concepts
+
+```mermaid
+mindmap
+  root((Chapter 25 — OOP IQ))
+    Class Basics
+      fields
+      methods
+      display
+    Default Params
+      constructor defaults
+      omitted args
+    this
+      per instance
+      independent state
+    Chaining
+      return this
+      fluent APIs
+```
+
+### Key snippets
+
+```js
+// EX4.js — return this enables chaining
+class Counter {
+  constructor() { this.count = 0; }
+  increment() { this.count++; return this; }
+  display() { console.log("Count:", this.count); return this; }
+}
+new Counter().increment().increment().increment().display();  // Count: 3
+
+// EX2.js — constructor default values
+class Environment {
+  constructor(name = "staging", port = 3000) {
+    this.name = name;
+    this.port = port;
+  }
+  getURL() { return "http://" + this.name + ":" + this.port; }
+}
+console.log(new Environment().getURL());                    // http://staging:3000
+console.log(new Environment("production", 8080).getURL()); // http://production:8080
+```
+
+### Run them
+
+```bash
+node chapter_25_OOP_Interview_Questions/EX1.js
+node chapter_25_OOP_Interview_Questions/EX2.js
+node chapter_25_OOP_Interview_Questions/EX3.js
+node chapter_25_OOP_Interview_Questions/EX4.js
+```
+
+---
+
+## 📖 What's in Chapter 26 — TypeScript Fundamentals (Available Now)
+
+### Files
+
+| File | Topic | What you'll learn |
+|------|-------|-------------------|
+| `194_TS_HelloWorld.ts` | First `.ts` file | Type-annotated parameter with `: string`, return `: void` |
+| `195_TS_Part1.ts` | Primitive types | `string`, `number`, `boolean`, `null`, `undefined`, `any`, `unknown` |
+| `196_TS_Part2.ts` | Arrays | `number[]`, `Array<string>` — typed collections |
+| `197_TS_Part2.ts` | Typed variables | Typed `let` — type annotation prevents silent mismatches |
+| `198_Part3.ts` | Function return types | `: string`, `: void`, `: never` — what a function promises to return |
+| `199_IQ.ts` | Real-world helpers | `buildEndpoint`, `isSuccessCode`, `logTestStep` — typed utility functions |
+| `200_IQ.ts` | Typed filter | `getFailedCodes(codes: number[]): number[]` — typed array + filter |
+
+### Key Concepts
+
+**Concept:** TypeScript adds a type layer on top of JavaScript. Every variable, parameter, and return value can declare what type it holds — the compiler catches mismatches before the code runs.
+
+**Why it matters for SDETs:** Playwright ships its own TypeScript types. When you type `page.goto(url)`, TypeScript confirms `url` is a string. Typos and type errors surface in the editor, not in a broken CI run.
+
+```mermaid
+mindmap
+  root((Chapter 26 — TypeScript))
+    Primitive Types
+      string
+      number
+      boolean
+      null
+      undefined
+      any
+      unknown
+    Arrays
+      number[]
+      Array<string>
+    Function Annotations
+      param: type
+      return: type
+      void
+      never
+    Why TypeScript
+      catch errors at compile time
+      IDE autocomplete
+      self-documenting code
+```
+
+### Key snippets
+
+```ts
+// 195_TS_Part1.ts — primitive type annotations
+let name: string = "John";
+let age: number = 30;
+let isActive: boolean = true;
+let nothing: null = null;
+let notDefined: undefined = undefined;
+
+// any — escape hatch (avoid when possible)
+let anything: any = "hello";
+
+// unknown — safer than any (must narrow before use)
+let userInput: unknown = "hello";
+
+// 196_TS_Part2.ts — typed arrays
+let numbers: number[] = [1, 2, 3];
+let names: Array<string> = ["John", "Jane"];
+
+// 198_Part3.ts — function return types
+function greet(name: string): string {
+    return `Hello, ${name}!`;
+}
+
+function logTestStep(step: string): void {
+    console.log("[STEP] " + step);   // void = no return value
+}
+
+function throwError(message: string): never {
+    throw new Error(message);         // never = never returns
+}
+
+// 199_IQ.ts — typed helpers
+function buildEndpoint(base: string, path: string): string {
+    return base + path;
+}
+function isSuccessCode(code: number): boolean {
+    return code >= 200 && code < 300;
+}
+console.log(buildEndpoint("https://api.com", "/users")); // https://api.com/users
+console.log(isSuccessCode(200));  // true
+console.log(isSuccessCode(404));  // false
+```
+
+| Type | Example | Notes |
+|:-----|:--------|:------|
+| `string` | `let url: string` | Text values |
+| `number` | `let status: number` | int and float — one type |
+| `boolean` | `let isPassed: boolean` | `true` / `false` |
+| `any` | `let x: any` | Opt-out of type checking |
+| `unknown` | `let x: unknown` | Safe version of `any` — narrow before use |
+| `void` | `: void` | Function returns nothing |
+| `never` | `: never` | Function never returns (throws or infinite) |
+| `T[]` | `number[]` | Typed array shorthand |
+| `Array<T>` | `Array<string>` | Generic array syntax |
+
+### Run them
+
+```bash
+npx tsc chapter_26_Typescript/194_TS_HelloWorld.ts && node chapter_26_Typescript/194_TS_HelloWorld.js
+npx ts-node chapter_26_Typescript/195_TS_Part1.ts
+npx ts-node chapter_26_Typescript/198_Part3.ts
+npx ts-node chapter_26_Typescript/199_IQ.ts
+npx ts-node chapter_26_Typescript/200_IQ.ts
+```
+
+---
+
+## 📖 What's in Chapter 27 — TypeScript Interfaces (Available Now)
+
+### Files
+
+| File | Topic | What you'll learn |
+|------|-------|-------------------|
+| `201_IF.ts` | Interface basics | `interface TestCase` — define a typed shape for test objects |
+| `202_IF_Part2.ts` | Optional fields | `headers?: object` — mark a property as optional with `?` |
+| `203_IF_READONLY.ts` | `readonly` | `readonly statusCode` — set once, never changed |
+| `204_IF_READOnly.ts` | ReadonlyArray | `readonly items: readonly number[]` — immutable array |
+
+### Key Concepts
+
+**Concept:** An `interface` defines the **shape** of an object — which properties it must have, what types they are, and which are optional. TypeScript enforces this shape at compile time.
+
+**Why it matters for SDETs:** Playwright's own types use interfaces — `Page`, `Locator`, `BrowserContext` are all interfaces. Defining your own for `TestCase`, `APIResponse`, or `PageConfig` objects means the IDE autocompletes fields and catches typos before runtime.
+
+```mermaid
+mindmap
+  root((Chapter 27 — Interfaces))
+    Define Shape
+      interface Name {}
+      required properties
+      type annotations
+    Optional
+      field?: type
+      may or may not be present
+    Readonly
+      readonly field
+      set at init only
+    ReadonlyArray
+      readonly T[]
+      elements cannot change
+    Real-world uses
+      TestCase
+      APIResponse
+      PageConfig
+```
+
+### Key snippets
+
+```ts
+// 201_IF.ts — basic interface
+interface TestCase {
+    id: number;
+    name: string;
+    status: string;
+    duration: number;
+}
+let test1: TestCase = {
+    id: 1,
+    name: "Login with valid credentials",
+    status: "PASS",
+    duration: 1500
+};
+console.log("TC-" + test1.id + ": " + test1.name + " → " + test1.status);
+// TC-1: Login with valid credentials → PASS
+
+// 202_IF_Part2.ts — optional fields with ?
+interface APIResponse {
+    body: string;
+    headers?: object;     // optional — may be omitted
+    responseTime?: number; // optional
+}
+let response1: APIResponse = { body: "OK" };           // valid — optionals absent
+let response2: APIResponse = { body: "OK", headers: {}, responseTime: 400 }; // also valid
+
+// 203_IF_READONLY.ts — readonly prevents mutation
+interface APIConfig {
+    readonly statusCode: number;
+    body: string;
+    headers?: object;
+}
+let config: APIConfig = { statusCode: 200, body: '{"user": "admin"}' };
+// config.statusCode = 404;  // ❌ TypeScript error — cannot assign to readonly
+config.body = "updated";     // ✅ body is not readonly
+```
+
+| Modifier | Syntax | Effect |
+|:---------|:-------|:-------|
+| Required | `name: string` | Must be present |
+| Optional | `name?: string` | May be omitted |
+| Readonly | `readonly name: string` | Cannot be changed after creation |
+| ReadonlyArray | `readonly items: readonly T[]` | Array and its elements are immutable |
+
+### Run them
+
+```bash
+npx ts-node chapter_27_TypeScript_Interface/201_IF.ts
+npx ts-node chapter_27_TypeScript_Interface/202_IF_Part2.ts
+npx ts-node chapter_27_TypeScript_Interface/203_IF_READONLY.ts
+npx ts-node chapter_27_TypeScript_Interface/204_IF_READOnly.ts
+```
+
+---
+
 ## 🔭 What's Coming Next
 
 ```mermaid
@@ -3416,21 +3909,35 @@ graph TD
         D2 --> D3[Ch 18: Async / Await ✅]
         D3 --> D4[Ch 19: Playwright Intro ✅]
         D4 --> D5[Ch 20: OOP — ES Modules & Classes ✅]
+        D5 --> D6[Ch 22: Encapsulation ✅]
+        D6 --> D7[Ch 23: Inheritance ✅]
+        D7 --> D8[Ch 24: Polymorphism ✅]
+        D8 --> D9[Ch 25: OOP Interview Qs ✅]
+        D9 --> D10[Ch 26: TypeScript Fundamentals ✅]
+        D10 --> D11[Ch 27: TypeScript Interfaces ✅]
     end
 
     subgraph next["Next Up"]
-        N1[OOP — Inheritance]
-        N2[TypeScript Fundamentals]
+        N1[TypeScript Enums & Generics]
+        N2[TypeScript Access Modifiers]
         N3[Playwright: Locators & Assertions]
     end
 
-    D5 --> N1 --> N2 --> N3
+    D11 --> N1 --> N2 --> N3
 
     style done fill:#e8f5e9,stroke:#2e7d32
     style next fill:#fff3e0,stroke:#e65100
 ```
 
 **Just shipped:**
+- ✅ Chapter 22 — **Encapsulation**: `#` private fields, public method gates, guarded setters, Page Object analogy (files `179`–`182`)
+- ✅ Chapter 23 — **Inheritance**: `extends`, `super()`, method override, `super.method()`, polymorphic loop, real POM (BasePage → Pages), multi-level & hierarchical (files `183`–`191`)
+- ✅ Chapter 24 — **Polymorphism**: method overriding — same name, subclass body, runner loop pattern (file `192`)
+- ✅ Chapter 25 — **OOP Interview Questions**: class drills — fields, default constructor params, `this` per instance, method chaining with `return this` (EX1–EX4)
+- ✅ Chapter 26 — **TypeScript Fundamentals**: primitive types, typed arrays, function annotations (`: string`, `: void`, `: never`), real-world typed helpers (files `194`–`200`)
+- ✅ Chapter 27 — **TypeScript Interfaces**: `interface` shapes, optional fields `?`, `readonly` properties, `ReadonlyArray` (files `201`–`204`)
+
+**Previously shipped:**
 - ✅ Chapter 4 extended with **Temporal Dead Zone (TDZ)** deep-dive (files `18`–`21`)
 - ✅ Chapter 5 — **Literals**: null/undefined, every number form, strings, template literals (files `22`–`29`)
 - ✅ Chapter 6 — **Operators (Part 1)**: arithmetic, comparison (`==` vs `===`), confusing-comparisons reference, logical, string concat (files `30`–`40`)
